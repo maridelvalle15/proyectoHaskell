@@ -1,3 +1,6 @@
+data Term = Var Char | Or Term Term | And Term Term | Imp Term Term |
+			Equiv Term Term | Inequiv Term Term | Igual Term Term |
+			Truee | Falsee
 a:: Term
 a = Var 'a'
 

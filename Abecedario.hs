@@ -1,7 +1,8 @@
 module Abecedario where 
 data Term = Var Char | Neg Term |Or Term Term | And Term Term | Imp Term Term |
-			Equiv Term Term | Inequiv Term Term | Igual Term Term |
-			Truee | Falsee
+			Equiv Term Term | Inequiv Term Term | Truee | Falsee
+data Equation = Igual Term Term
+
 a:: Term
 a = Var 'a'
 

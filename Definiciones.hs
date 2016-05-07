@@ -25,15 +25,13 @@ x <==> y =  Equiv x y
 infix 4 !<==>
 (!<==>) :: Term -> Term -> Term
 x !<==> y =  Inequiv x y
-
-{-
-infix 6 ===
+infix 3 ===
 (===) :: Term -> Term -> Equation
 x === y = Igual x y
 --infix 9 =:
-(=:) :: Term -> Term -> Sust     
-a =: b = sust exp (a,b)
--}
+--(=:) :: Term -> Term -> Sust     
+--a =: b = sust exp (a,b)
+--}
 {-
 --sustitucion
 --sust :: Term -> (Term,Term) -> Term

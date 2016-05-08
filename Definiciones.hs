@@ -28,17 +28,15 @@ x !<==> y =  Inequiv x y
 infix 3 ===
 (===) :: Term -> Term -> Equation
 x === y = Igual x y
---infix 9 =:
---(=:) :: Term -> Term -> Sust     
---a =: b = sust exp (a,b)
---}
+infix 1 =:
+(=:) :: Term -> Term -> Sust     
+x =: y = sust x y 
 {-
 --sustitucion
---sust :: Term -> (Term,Term) -> Term
---sust (Var s1) (Var s2, term2) = if s1==s2 then term2 else (Var s1)
+--sust :: Term -> Sust -> Term
+--sust term sust = if t1==t2 then term2 else (Var s1)
 --sust (Sum term1 term2) (var,term) = Sum (sust term1 (var,term)) (sust term2 (var,term))
 -}
-
 showTerm :: Term -> String
 showTerm(Var i) = [i]
 --Mostrar \/

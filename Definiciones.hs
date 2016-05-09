@@ -30,19 +30,27 @@ infix 3 ===
 x === y = Igual x y
 infix 1 =:
 (=:) :: Term -> Term -> Sust     
-x =: y = sust x y 
-{-
---sustitucion
---sust :: Term -> Sust -> Term
---sust term sust = if t1==t2 then term2 else (Var s1)
---sust (Sum term1 term2) (var,term) = Sum (sust term1 (var,term)) (sust term2 (var,term))
--}
+x =: y = Sustit x y 
+
+-- sustitucion
+sust :: Term -> (Sust) -> Term
+sust Truee (Sustit t2 t3) = Truee
+sust Falsee (Sustit t2 t3) = Falsee
+sust (Var i) (Sustit (Var j) (Var k)) = if i==k then (Var j) else (Var i)
+sust (Var i) (Sustit t1 (Var j)) = if i==j then t1 else (Var i)
+sust (Or t1 t2) (Sustit (Var i) (Var j)) = Or (sust t1 ((Var i)=:(Var j))) (sust t2 ((Var i)=:(Var j)))
+
+
 showTerm :: Term -> String
 showTerm(Var i) = [i]
+--Mostrar Neg
+showTerm (Neg (Var i)) = "¬" ++ showTerm(Var i)
+showTerm (Neg t) = "¬" ++ showTerm(t)
 --Mostrar \/
 showTerm(Or (Var i)(Var j)) = showTerm(Var i) ++ " \\/ " ++ showTerm(Var j)
 showTerm(Or (Var i) t) = showTerm(Var i) ++ " \\/ (" ++ showTerm(t) ++ ")"
 showTerm(Or t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Var i) 
+showTerm (Or (Neg t1) t2) = "¬( "++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")" 
 showTerm (Or t1 t2) = "(" ++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")"
  --Mostrar /\
 showTerm(And (Var i)(Var j)) = showTerm(Var i) ++ " /\\ " ++ showTerm(Var j)
@@ -64,11 +72,12 @@ showTerm(Inequiv (Var i)(Var j)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Var 
 showTerm(Inequiv (Var i) t) = showTerm(Var i) ++ " !<==> (" ++ showTerm(t) ++ ")"
 showTerm(Inequiv t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " !<==> " ++ showTerm(Var i) 
 showTerm (Inequiv t1 t2) = "(" ++ showTerm t1 ++ ") !<==> (" ++ showTerm t2 ++ ")"
---Mostrar Neg
-showTerm (Neg (Var i)) = "¬" ++ showTerm(Var i)
-showTerm (Neg t) = "¬(" ++ showTerm(t) ++")"
 --Mostra true y false
 showTerm(Truee) = "true"
 showTerm(Falsee) = "false"
 
+showSust :: Sust -> String
+showSust(Sustit t1 t2) = showTerm t1 ++ " =: " ++ showTerm t2
+
 instance Show Term where show = showTerm
+instance Show Sust where show = showSust

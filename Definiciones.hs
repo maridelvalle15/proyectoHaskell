@@ -57,15 +57,18 @@ sust (Inequiv t1 t2) (Sustit t3 (Var j)) = Inequiv (sust t1 (t3=:(Var j))) (sust
 -- *** SHOW TERMS *** --
 showTerm :: Term -> String
 showTerm(Var i) = [i]
---Mostrar Neg
+--Mostrar ¬
 showTerm (Neg (Var i)) = "¬" ++ showTerm(Var i)
 showTerm (Neg t) = "¬" ++ showTerm(t)
 --Mostrar \/
 showTerm(Or (Var i)(Var j)) = showTerm(Var i) ++ " \\/ " ++ showTerm(Var j)
 showTerm(Or (Var i) t) = showTerm(Var i) ++ " \\/ (" ++ showTerm(t) ++ ")"
 showTerm(Or t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Var i) 
-showTerm (Or (Neg t1) t2) = "¬( "++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")" 
 showTerm (Or t1 t2) = "(" ++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")"
+--Mostrar \/ ¬
+--showTerm (Or (Neg t1) t2) = "¬( "++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")" 
+--showTerm (Or t1 (Neg t2)) = showTerm t1 ++ " \\/ ¬(" ++ showTerm t2 ++ ")" 
+--showTerm ( Neg (Or t1 t2) ) = "¬((" ++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ "))"
  --Mostrar /\
 showTerm(And (Var i)(Var j)) = showTerm(Var i) ++ " /\\ " ++ showTerm(Var j)
 showTerm(And (Var i) t) = showTerm(Var i) ++ " /\\ (" ++ showTerm(t) ++ ")"

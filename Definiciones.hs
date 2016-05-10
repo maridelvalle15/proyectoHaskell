@@ -53,22 +53,61 @@ sust (Equiv t1 t2) (Sustit t3 (Var j)) = Equiv (sust t1 (t3=:(Var j))) (sust t2 
 --sustitucion para !<==>
 sust (Inequiv t1 t2) (Sustit (Var i) (Var j)) = Inequiv (sust t1 ((Var i)=:(Var j))) (sust t2 ((Var i)=:(Var j)))
 sust (Inequiv t1 t2) (Sustit t3 (Var j)) = Inequiv (sust t1 (t3=:(Var j))) (sust t2 (t3=:(Var j)))
+--sustitucion para ¬
+sust (Neg t1) (Sustit (Var i) (Var j)) = Neg (sust t1 ((Var i)=:(Var j)))
+sust (Neg t1) (Sustit t3 (Var j)) = Neg (sust t1 (t3=:(Var j)))
 
 -- *** SHOW TERMS *** --
 showTerm :: Term -> String
 showTerm(Var i) = [i]
+
 --Mostrar ¬
 showTerm (Neg (Var i)) = "¬" ++ showTerm(Var i)
-showTerm (Neg t) = "¬" ++ showTerm(t)
+--Mostrar ¬ \/
+showTerm(Or (Neg t1) (Neg t2)) = showTerm(Neg t1) ++ " \\/ " ++ showTerm(Neg t2)
+showTerm(Or (Var i) (Neg t)) = showTerm(Var i) ++ " \\/ " ++ showTerm(Neg t)
+showTerm(Or (Neg t) (Var i)) = showTerm(Neg t) ++ " \\/ " ++ showTerm(Var i)
+showTerm(Or (Neg t) (t1)) = showTerm(Neg t) ++ " \\/ " ++ showTerm(t1)
+showTerm(Or (t1) (Neg t)) = showTerm(t1) ++ " \\/ " ++ showTerm(Neg t)
+showTerm (Neg (Or t1 t2 )) = "¬(" ++ showTerm (Or t1 t2) ++ ")"
+--Mostrar ¬ /\
+showTerm (And (Neg t1) (Neg t2)) =   showTerm (Neg t1) ++ "/\\" ++ showTerm(Neg t2) 
+showTerm (Neg (And t1 t2 )) = "¬(" ++ showTerm (And t1 t2) ++ ")"
+showTerm(And (Var i) (Neg t)) = showTerm(Var i) ++ " /\\ " ++ showTerm(Neg t)
+showTerm(And (Neg i)(Var j)) = showTerm(Neg i) ++ " /\\ " ++ showTerm(Var j)
+showTerm(And (Neg t) t1) = showTerm(Neg t) ++ " /\\ "  ++ showTerm(t1) 
+showTerm(And t1 (Neg t)) = showTerm(t1) ++  " /\\ " ++ showTerm(Neg t) 
+ --Mostrar ¬ ==>
+showTerm(Imp (Neg t1)(Neg t2)) = showTerm(Neg t1) ++ " ==> " ++ showTerm(Neg t2)
+showTerm(Imp (Neg t) t1) = showTerm(Neg t) ++ " ==> " ++ showTerm(t1)
+showTerm(Imp t1 (Neg t)) = showTerm(t1) ++ " ==> " ++ showTerm(Neg t) 
+showTerm (Neg (Imp t1 t2)) = "¬(" ++ showTerm (Imp t1 t2) ++ ")"
+showTerm(Imp (Var i) (Neg t)) = showTerm(Var i) ++ " ==> " ++ showTerm(Neg t)
+showTerm(Imp (Neg i)(Var j)) = showTerm(Neg i) ++ " ==> " ++ showTerm(Var j)
+ --Mostrar ¬ <==>
+showTerm(Equiv (Neg t1)(Neg t2)) = showTerm(Neg t1) ++ " <==> " ++ showTerm(Neg t2)
+showTerm(Equiv (Neg t) t1) = showTerm(Neg t) ++ " <==> " ++ showTerm(t1)
+showTerm(Equiv t1 (Neg t)) = showTerm(t1) ++ " <==> " ++ showTerm(Neg t) 
+showTerm (Neg (Equiv t1 t2)) = "¬(" ++ showTerm (Equiv t1 t2) ++ ")"
+showTerm(Equiv (Var i) (Neg t)) = showTerm(Var i) ++ " <==> " ++ showTerm(Neg t)
+showTerm(Equiv (Neg i)(Var j)) = showTerm(Neg i) ++ " <==> " ++ showTerm(Var j)
+ --Mostrar ¬ !<==>
+showTerm(Inequiv (Neg t1)(Neg t2)) = showTerm(Neg t1) ++ " !<==> " ++ showTerm(Neg t2)
+showTerm(Inequiv (Neg t) t1) = showTerm(Neg t) ++ " !<==> " ++ showTerm(t1)
+showTerm(Inequiv t1 (Neg t)) = showTerm(t1) ++ " !<==> " ++ showTerm(Neg t) 
+showTerm (Neg (Inequiv t1 t2)) = "¬(" ++ showTerm (Inequiv t1 t2) ++ ")"
+showTerm(Inequiv (Var i) (Neg t)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Neg t)
+showTerm(Inequiv (Neg i)(Var j)) = showTerm(Neg i) ++ " !<==> " ++ showTerm(Var j)
+
+
+showTerm (Neg t1) = "¬(" ++ showTerm t1 ++ ")"
+
 --Mostrar \/
 showTerm(Or (Var i)(Var j)) = showTerm(Var i) ++ " \\/ " ++ showTerm(Var j)
 showTerm(Or (Var i) t) = showTerm(Var i) ++ " \\/ (" ++ showTerm(t) ++ ")"
-showTerm(Or t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Var i) 
+showTerm(Or t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Var i)
 showTerm (Or t1 t2) = "(" ++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")"
---Mostrar \/ ¬
---showTerm (Or (Neg t1) t2) = "¬( "++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")" 
---showTerm (Or t1 (Neg t2)) = showTerm t1 ++ " \\/ ¬(" ++ showTerm t2 ++ ")" 
---showTerm ( Neg (Or t1 t2) ) = "¬((" ++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ "))"
+
  --Mostrar /\
 showTerm(And (Var i)(Var j)) = showTerm(Var i) ++ " /\\ " ++ showTerm(Var j)
 showTerm(And (Var i) t) = showTerm(Var i) ++ " /\\ (" ++ showTerm(t) ++ ")"

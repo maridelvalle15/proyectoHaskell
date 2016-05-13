@@ -1,11 +1,13 @@
 module Definiciones where 
 import Abecedario 
 
+
 -- *** TERMINOS VALIDOS ***
 true :: Term
 true = Truee
 false :: Term
 false = Falsee
+
 
 -- *** OPERADORES ***
 neg :: Term -> Term
@@ -32,6 +34,7 @@ infix 1 =:
 (=:) :: Term -> Term -> Sust     
 x =: y = Sustit x y 
 
+
 -- *** SUSTITUCION ***
 sust :: Term -> (Sust) -> Term
 sust Truee (Sustit t2 t3) = Truee
@@ -57,12 +60,25 @@ sust (Inequiv t1 t2) (Sustit t3 (Var j)) = Inequiv (sust t1 (t3=:(Var j))) (sust
 sust (Neg t1) (Sustit (Var i) (Var j)) = Neg (sust t1 ((Var i)=:(Var j)))
 sust (Neg t1) (Sustit t3 (Var j)) = Neg (sust t1 (t3=:(Var j)))
 
-sustdos :: Term -> (Term,Sust,Term) -> Term
-sustdos (Var i) ((Var z),(Sustit (Var j) (Var k)),(Var w)) = if k==i then (Var z)
-								else if w==i then (Var j)
-								else (Var i)
+sust t1 (SustitDos((Var z),(Sustit (Var j) (Var k)),(Var w))) = sust (sust t1 ((Var z)=:(Var k))) ((Var j)=:(Var w))
 
--- *** SHOW TERMS *** --sust (sust (t1 (k j)))
+-- sustitucion de la forma: (p,q=:x,z)
+sustdos :: Term -> (Term,Sust,Term) -> Term
+sustdos t1 (t2,(Sustit t3 (Var k)),(Var w)) = sust (sust t1 (t2=:(Var k))) (t3=:(Var w))
+-- sustitucion de la forma: (p,q,r=:x,z,w)
+susttres :: Term -> (Term,Term,Sust,Term,Term) -> Term
+susttres t1 (t2,t3,(Sustit t4 (Var k)),(Var w),(Var z)) = sust (sust (sust t1 (t2=:(Var k))) (t3=:(Var w))) (t4=:(Var z))
+
+
+-- ** COMPARAR EXPRESIONES **
+-- comparar lados de una ecuacion
+compare_show :: Term -> Equation -> Term
+compare_show t1 (Igual t2 t3) = if t1==t2 then t3 
+								else if t1==t3 then t2
+								else error "Mala aplicacion de teorema"
+
+
+-- *** SHOW TERMS ***
 showTerm :: Term -> String
 showTerm(Var i) = [i]
 
@@ -103,8 +119,7 @@ showTerm(Inequiv t1 (Neg t)) = showTerm(t1) ++ " !<==> " ++ showTerm(Neg t)
 showTerm (Neg (Inequiv t1 t2)) = "¬(" ++ showTerm (Inequiv t1 t2) ++ ")"
 showTerm(Inequiv (Var i) (Neg t)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Neg t)
 showTerm(Inequiv (Neg i)(Var j)) = showTerm(Neg i) ++ " !<==> " ++ showTerm(Var j)
-
-
+-- Mostrar ¬ termino
 showTerm (Neg t1) = "¬(" ++ showTerm t1 ++ ")"
 
 --Mostrar \/
@@ -137,29 +152,111 @@ showTerm (Inequiv t1 t2) = "(" ++ showTerm t1 ++ ") !<==> (" ++ showTerm t2 ++ "
 showTerm(Truee) = "true"
 showTerm(Falsee) = "false"
 
+
 -- *** SHOW SUST *** --
 showSust :: Sust -> String
 --Mostrar sustitucion
 showSust(Sustit t1 t2) = showTerm t1 ++ " =: " ++ showTerm t2
+
 
 -- *** SHOW EQUATION *** --
 showEquation :: Equation -> String
 --Mostrar sustitucion
 showEquation(Igual t1 t2) = showTerm t1 ++ " === " ++ showTerm t2
 
+
 -- *** INSTANCE ***
 instance Show Term where show = showTerm
 instance Show Sust where show = showSust
 instance Show Equation where show = showEquation
-
+-- comparar terminos
 instance Eq Term where 	
 						Var i == Var j = i == j
+						-- comparar true
 						Truee == Truee = True
+						Truee == Falsee = False
+						Falsee == Truee = False
+						(Var i) == Truee = False
+						Truee == (Var i) = False
+						(Neg t1) == Truee = False
+						Truee == (Neg t1) = False
+						Truee == (Or t3 t4) = False
+						(Or t1 t2) == Truee = False
+						Truee == (And t3 t4) = False
+						(And t1 t2) == Truee = False
+						Truee == (Imp t3 t4) = False
+						(Imp t1 t2) == Truee = False
+						Truee == (Equiv t3 t4) = False
+						(Equiv t1 t2) == Truee = False
+						Truee == (Inequiv t3 t4) = False
+						(Inequiv t1 t2) == Truee = False
+						-- comparar false
 						Falsee == Falsee = True
+						(Var i) == Falsee = False
+						Falsee == (Var i) = False
+						(Neg t1) == Falsee = False
+						Falsee == (Neg t1) = False
+						Falsee == (Or t3 t4) = False
+						(Or t1 t2) == Falsee = False
+						Falsee == (And t3 t4) = False
+						(And t1 t2) == Falsee = False
+						Falsee == (Imp t3 t4) = False
+						(Imp t1 t2) == Falsee = False
+						Falsee == (Equiv t3 t4) = False
+						(Equiv t1 t2) == Falsee = False
+						Falsee == (Inequiv t3 t4) = False
+						(Inequiv t1 t2) == Falsee = False
+						-- comparar neg
 						(Neg t1) == (Neg t2) = t1 == t2
+						(Neg t1) == (Var i) = False
+						(Var i) == (Neg t2) = False
+						(Neg t1) == (Or t3 t4) = False
+						(Or t1 t2) == (Neg t3) = False
+						(Neg t1) == (And t3 t4) = False
+						(And t1 t2) == (Neg t3) = False
+						(Neg t1) == (Imp t3 t4) = False
+						(Imp t1 t2) == (Neg t3) = False
+						(Neg t1) == (Equiv t3 t4) = False
+						(Equiv t1 t2) == (Neg t3) = False
+						(Neg t1) == (Inequiv t3 t4) = False
+						(Inequiv t1 t2) == (Neg t3) = False
+						-- comparar or
 						(Or t1 t2) == (Or t3 t4) = (t1 == t3) && (t2 == t4)
+						(Var i) == (Or t3 t4) = False
+						(Or t1 t2) == (Var i) = False
+						(Or t1 t2) == (And t3 t4) = False
+						(And t1 t2) == (Or t3 t4) = False
+						(Or t1 t2) == (Imp t3 t4) = False
+						(Imp t1 t2) == (Or t3 t4) = False
+						(Or t1 t2) == (Equiv t3 t4) = False
+						(Equiv t1 t2) == (Or t3 t4) = False
+						(Or t1 t2) == (Inequiv t3 t4) = False
+						(Inequiv t1 t2) == (Or t3 t4) = False
+						-- comparar and
 						(And t1 t2) == (And t3 t4) = (t1 == t3) && (t2 == t4)
+						(Var i) == (And t3 t4) = False
+						(And t1 t2) == (Imp t3 t4) = False
+						(Imp t1 t2) == (And t3 t4) = False
+						(And t1 t2) == (Equiv t3 t4) = False
+						(Equiv t1 t2) == (And t3 t4) = False
+						(And t1 t2) == (Inequiv t3 t4) = False
+						(Inequiv t1 t2) == (And t3 t4) = False
+						-- comparar imp
 						(Imp t1 t2) == (Imp t3 t4) = (t1 == t3) && (t2 == t4)
+						(Var i) == (Imp t3 t4) = False
+						(Imp t1 t2) == (Equiv t3 t4) = False
+						(Equiv t1 t2) == (Imp t3 t4) = False
+						(Imp t1 t2) == (Inequiv t3 t4) = False
+						(Inequiv t1 t2) == (Imp t3 t4) = False
+						-- comparar equiv
 						(Equiv t1 t2) == (Equiv t3 t4) = (t1 == t3) && (t2 == t4)
+						(Var i) == (Equiv t3 t4) = False
+						(Equiv t1 t2) == (Inequiv t3 t4) = False
+						(Inequiv t1 t2) == (Equiv t3 t4) = False
+						-- comparar inequiv
 						(Inequiv t1 t2) == (Inequiv t3 t4) = (t1 == t3) && (t2 == t4)
-						
+						(Var i) == (Inequiv t3 t4) = False
+
+
+-- Preguntar por la sustitución de tuplas
+-- Preguntar si hay que hacer todas las combinaciones para la equivalencia de términos

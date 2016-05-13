@@ -146,3 +146,15 @@ showEquation(Igual t1 t2) = showTerm t1 ++ " === " ++ showTerm t2
 instance Show Term where show = showTerm
 instance Show Sust where show = showSust
 instance Show Equation where show = showEquation
+
+instance Eq Term where 	
+						Var i == Var j = i == j
+						Truee == Truee = True
+						Falsee == Falsee = True
+						(Neg t1) == (Neg t2) = t1 == t2
+						(Or t1 t2) == (Or t3 t4) = (t1 == t3) && (t2 == t4)
+						(And t1 t2) == (And t3 t4) = (t1 == t3) && (t2 == t4)
+						(Imp t1 t2) == (Imp t3 t4) = (t1 == t3) && (t2 == t4)
+						(Equiv t1 t2) == (Equiv t3 t4) = (t1 == t3) && (t2 == t4)
+						(Inequiv t1 t2) == (Inequiv t3 t4) = (t1 == t3) && (t2 == t4)
+						

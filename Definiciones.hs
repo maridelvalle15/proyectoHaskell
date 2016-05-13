@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 module Definiciones where 
 import Abecedario 
 
@@ -60,15 +61,31 @@ sust (Inequiv t1 t2) (Sustit t3 (Var j)) = Inequiv (sust t1 (t3=:(Var j))) (sust
 sust (Neg t1) (Sustit (Var i) (Var j)) = Neg (sust t1 ((Var i)=:(Var j)))
 sust (Neg t1) (Sustit t3 (Var j)) = Neg (sust t1 (t3=:(Var j)))
 
+
+class Sustitution s where
+	sust' ::Term -> s -> Term
+
+instance Sustitution Sust where
+	sust' t (Sustit t1 t2) = sust t (t1=:t2)
+
+instance Sustitution (Term,Sust,Term) where
+	sust' t (t1,Sustit t2 t3,t4) = sust (sust (sust t (fresca=:t1)) (t4=:t2)) (t3=:fresca)
+
+instance Sustitution (Term,Term,Sust,Term,Term) where
+	sust' t (t1,t5,Sustit t2 t3,t4,t6) = sust(sust(sust (sust (sust t (fresca=:t1)) (fresca'=:t5)) (t3=:fresca)) (t6=:t2)) (t4=:fresca')
+
+--instace Sustitution 
+
+{-
 sust t1 (SustitDos((Var z),(Sustit (Var j) (Var k)),(Var w))) = sust (sust t1 ((Var z)=:(Var k))) ((Var j)=:(Var w))
 
 -- sustitucion de la forma: (p,q=:x,z)
 sustdos :: Term -> (Term,Sust,Term) -> Term
-sustdos t1 (t2,(Sustit t3 (Var k)),(Var w)) = sust (sust t1 (t2=:(Var k))) (t3=:(Var w))
+sustdos t1 (t2,(Sustit t3 (Var k)),(Var w)) = sust (sust (sust t1 ((Var '?')=:(Var k)) )(t2=:(Var k))) (t3=:(Var w))
 -- sustitucion de la forma: (p,q,r=:x,z,w)
 susttres :: Term -> (Term,Term,Sust,Term,Term) -> Term
 susttres t1 (t2,t3,(Sustit t4 (Var k)),(Var w),(Var z)) = sust (sust (sust t1 (t2=:(Var k))) (t3=:(Var w))) (t4=:(Var z))
-
+-}
 
 -- ** COMPARAR EXPRESIONES **
 -- comparar lados de una ecuacion
@@ -257,6 +274,11 @@ instance Eq Term where
 						(Inequiv t1 t2) == (Inequiv t3 t4) = (t1 == t3) && (t2 == t4)
 						(Var i) == (Inequiv t3 t4) = False
 
+proof (Igual t1 t2) = do
+						let x = t1
+						putStrLn $ id "prooving "++showEquation(Igual t1 t2)
+						putStrLn $ id ""
+						print x
 
--- Preguntar por la sustitución de tuplas
--- Preguntar si hay que hacer todas las combinaciones para la equivalencia de términos
+done :: Equation -> Term
+done (Igual t1 t2) = t2

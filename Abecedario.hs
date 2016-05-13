@@ -82,3 +82,9 @@ y = Var 'y'
 
 z:: Term
 z = Var 'z'
+
+fresca :: Term
+fresca = Var 'P'
+
+fresca' :: Term
+fresca' = Var 'A'

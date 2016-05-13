@@ -57,7 +57,10 @@ sust (Inequiv t1 t2) (Sustit t3 (Var j)) = Inequiv (sust t1 (t3=:(Var j))) (sust
 sust (Neg t1) (Sustit (Var i) (Var j)) = Neg (sust t1 ((Var i)=:(Var j)))
 sust (Neg t1) (Sustit t3 (Var j)) = Neg (sust t1 (t3=:(Var j)))
 
--- *** SHOW TERMS *** --
+--sustitucion para tuplas
+--sust t1 (SustitDos (t2,(Sustit (Var j) (Var k)),t4)) = sust t1 ((Var j)=:(Var k))
+
+-- *** SHOW TERMS *** --sust (sust (t1 (k j)))
 showTerm :: Term -> String
 showTerm(Var i) = [i]
 

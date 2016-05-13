@@ -137,6 +137,12 @@ showSust :: Sust -> String
 --Mostrar sustitucion
 showSust(Sustit t1 t2) = showTerm t1 ++ " =: " ++ showTerm t2
 
+-- *** SHOW EQUATION *** --
+showEquation :: Equation -> String
+--Mostrar sustitucion
+showEquation(Igual t1 t2) = showTerm t1 ++ " === " ++ showTerm t2
+
 -- *** INSTANCE ***
 instance Show Term where show = showTerm
 instance Show Sust where show = showSust
+instance Show Equation where show = showEquation

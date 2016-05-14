@@ -178,88 +178,43 @@ instance Eq Term where
 						Var i == Var j = i == j
 						-- comparar true
 						Truee == Truee = True
-						Truee == Falsee = False
-						Falsee == Truee = False
-						(Var i) == Truee = False
-						Truee == (Var i) = False
-						(Neg t1) == Truee = False
-						Truee == (Neg t1) = False
-						Truee == (Or t3 t4) = False
-						(Or t1 t2) == Truee = False
-						Truee == (And t3 t4) = False
-						(And t1 t2) == Truee = False
-						Truee == (Imp t3 t4) = False
-						(Imp t1 t2) == Truee = False
-						Truee == (Equiv t3 t4) = False
-						(Equiv t1 t2) == Truee = False
-						Truee == (Inequiv t3 t4) = False
-						(Inequiv t1 t2) == Truee = False
+						Truee == _ = False
+						_ == Truee = False
+
 						-- comparar false
 						Falsee == Falsee = True
-						(Var i) == Falsee = False
-						Falsee == (Var i) = False
-						(Neg t1) == Falsee = False
-						Falsee == (Neg t1) = False
-						Falsee == (Or t3 t4) = False
-						(Or t1 t2) == Falsee = False
-						Falsee == (And t3 t4) = False
-						(And t1 t2) == Falsee = False
-						Falsee == (Imp t3 t4) = False
-						(Imp t1 t2) == Falsee = False
-						Falsee == (Equiv t3 t4) = False
-						(Equiv t1 t2) == Falsee = False
-						Falsee == (Inequiv t3 t4) = False
-						(Inequiv t1 t2) == Falsee = False
+						_ == Falsee = False
+						Falsee == _ = False
+
 						-- comparar neg
 						(Neg t1) == (Neg t2) = t1 == t2
-						(Neg t1) == (Var i) = False
-						(Var i) == (Neg t2) = False
-						(Neg t1) == (Or t3 t4) = False
-						(Or t1 t2) == (Neg t3) = False
-						(Neg t1) == (And t3 t4) = False
-						(And t1 t2) == (Neg t3) = False
-						(Neg t1) == (Imp t3 t4) = False
-						(Imp t1 t2) == (Neg t3) = False
-						(Neg t1) == (Equiv t3 t4) = False
-						(Equiv t1 t2) == (Neg t3) = False
-						(Neg t1) == (Inequiv t3 t4) = False
-						(Inequiv t1 t2) == (Neg t3) = False
+						(Neg t1) == _ = False
+						_ == (Neg t1) = False
+
 						-- comparar or
 						(Or t1 t2) == (Or t3 t4) = (t1 == t3) && (t2 == t4)
-						(Var i) == (Or t3 t4) = False
-						(Or t1 t2) == (Var i) = False
-						(Or t1 t2) == (And t3 t4) = False
-						(And t1 t2) == (Or t3 t4) = False
-						(Or t1 t2) == (Imp t3 t4) = False
-						(Imp t1 t2) == (Or t3 t4) = False
-						(Or t1 t2) == (Equiv t3 t4) = False
-						(Equiv t1 t2) == (Or t3 t4) = False
-						(Or t1 t2) == (Inequiv t3 t4) = False
-						(Inequiv t1 t2) == (Or t3 t4) = False
+						_ == (Or t3 t4) = False
+						(Or t3 t4) == _ = False
+
 						-- comparar and
 						(And t1 t2) == (And t3 t4) = (t1 == t3) && (t2 == t4)
-						(Var i) == (And t3 t4) = False
-						(And t1 t2) == (Imp t3 t4) = False
-						(Imp t1 t2) == (And t3 t4) = False
-						(And t1 t2) == (Equiv t3 t4) = False
-						(Equiv t1 t2) == (And t3 t4) = False
-						(And t1 t2) == (Inequiv t3 t4) = False
-						(Inequiv t1 t2) == (And t3 t4) = False
+						_ == (And t3 t4) = False
+						(And t3 t4) == _ = False
+
 						-- comparar imp
 						(Imp t1 t2) == (Imp t3 t4) = (t1 == t3) && (t2 == t4)
-						(Var i) == (Imp t3 t4) = False
-						(Imp t1 t2) == (Equiv t3 t4) = False
-						(Equiv t1 t2) == (Imp t3 t4) = False
-						(Imp t1 t2) == (Inequiv t3 t4) = False
-						(Inequiv t1 t2) == (Imp t3 t4) = False
+						_ == (Imp t3 t4) = False
+						(Imp t3 t4) == _ = False
+
 						-- comparar equiv
 						(Equiv t1 t2) == (Equiv t3 t4) = (t1 == t3) && (t2 == t4)
-						(Var i) == (Equiv t3 t4) = False
-						(Equiv t1 t2) == (Inequiv t3 t4) = False
-						(Inequiv t1 t2) == (Equiv t3 t4) = False
+						_ == (Equiv t3 t4) = False
+						(Equiv t3 t4) == _ = False
+
 						-- comparar inequiv
 						(Inequiv t1 t2) == (Inequiv t3 t4) = (t1 == t3) && (t2 == t4)
-						(Var i) == (Inequiv t3 t4) = False
+						_ == (Inequiv t3 t4) = False
+						(Inequiv t3 t4) == _ = False
 
 proof (Igual t1 t2) = do
 						let x = t1

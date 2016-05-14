@@ -89,3 +89,10 @@ fresca = Var 'A'
 
 fresca' :: Term
 fresca' = Var 'B'
+
+with :: Term
+with = Var 'Z'
+using :: Term
+using = Var 'X'
+lambda :: Term
+lambda = Var 'Y'

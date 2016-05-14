@@ -77,7 +77,7 @@ instance Sustitution (Term,Term,Sust,Term,Term) where
 
 
 instantiate :: Equation -> Sust -> Equation
-instantiate (Igual t1 t2) (Sustit t3 (Var s2)) = Igual (sust t1 (Sustit t3 (Var s2))) (sust t2 (Sustit t3 (Var s2)))
+instantiate (Igual t1 t2) (Sustit t3 (Var s2)) = Igual (sust t1 (t3=:(Var s2))) (sust t2 (t3=:(Var s2)))
 
 -- ** COMPARAR EXPRESIONES **
 -- comparar lados de una ecuacion

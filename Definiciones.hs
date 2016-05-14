@@ -74,19 +74,6 @@ instance Sustitution (Term,Sust,Term) where
 instance Sustitution (Term,Term,Sust,Term,Term) where
 	sust t (t1,t2,Sustit t3 t4,t5,t6) = sust' (sust' (sust' (sust' (sust' t (fresca=:t4)) (fresca'=:t5)) (t3=:t6)) (t1=:fresca)) (t2=:fresca')
 
---instace Sustitution 
-
-{-
-sust t1 (SustitDos((Var z),(Sustit (Var j) (Var k)),(Var w))) = sust (sust t1 ((Var z)=:(Var k))) ((Var j)=:(Var w))
-
--- sustitucion de la forma: (p,q=:x,z)
-sustdos :: Term -> (Term,Sust,Term) -> Term
-sustdos t1 (t2,(Sustit t3 (Var k)),(Var w)) = sust (sust (sust t1 ((Var '?')=:(Var k)) )(t2=:(Var k))) (t3=:(Var w))
--- sustitucion de la forma: (p,q,r=:x,z,w)
-susttres :: Term -> (Term,Term,Sust,Term,Term) -> Term
-susttres t1 (t2,t3,(Sustit t4 (Var k)),(Var w),(Var z)) = sust (sust (sust t1 (t2=:(Var k))) (t3=:(Var w))) (t4=:(Var z))
--}
-
 -- ** COMPARAR EXPRESIONES **
 -- comparar lados de una ecuacion
 compare_show :: Term -> Equation -> Term

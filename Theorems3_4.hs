@@ -5,4 +5,4 @@ import System.IO
 import Control.Monad
 
 verify = let theorem = (true === ((p<==>p) <==> (q <==> q))) in 
-		proof theorem
+		statement 3.2 with (p =: p) using lambda z (z)

@@ -224,3 +224,15 @@ proof (Igual t1 t2) = do
 
 done :: Equation -> Term
 done (Igual t1 t2) = t2
+
+prop :: Float -> Equation
+prop num
+	| num == 3.1 = (p <==> q) <==> r === p <==> (q <==> r)
+	| num == 3.2 = (p <==> q) <==> (q <==>p ) === true
+	| num == 3.3 = (p <==> q) <==> q === p
+	| otherwise = error "The statement doesn't exists"
+
+statement num with (Sustit t1 t2) using lambda (Var i) = do
+															let x = t1
+															let th = prop num
+															print th

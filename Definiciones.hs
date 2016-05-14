@@ -37,42 +37,42 @@ x =: y = Sustit x y
 
 
 -- *** SUSTITUCION ***
-sust :: Term -> (Sust) -> Term
-sust Truee (Sustit t2 t3) = Truee
-sust Falsee (Sustit t2 t3) = Falsee
-sust (Var i) (Sustit (Var j) (Var k)) = if i==k then (Var j) else (Var i)
-sust (Var i) (Sustit t1 (Var j)) = if i==j then t1 else (Var i)
+sust' :: Term -> (Sust) -> Term
+sust' Truee (Sustit t2 t3) = Truee
+sust' Falsee (Sustit t2 t3) = Falsee
+sust' (Var i) (Sustit (Var j) (Var k)) = if i==k then (Var j) else (Var i)
+sust' (Var i) (Sustit t1 (Var j)) = if i==j then t1 else (Var i)
 -- sustitucion para \/
-sust (Or t1 t2) (Sustit (Var i) (Var j)) = Or (sust t1 ((Var i)=:(Var j))) (sust t2 ((Var i)=:(Var j)))
-sust (Or t1 t2) (Sustit t3 (Var j)) = Or (sust t1 (t3=:(Var j))) (sust t2 (t3=:(Var j)))
+sust' (Or t1 t2) (Sustit (Var i) (Var j)) = Or (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
+sust' (Or t1 t2) (Sustit t3 (Var j)) = Or (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
 --sustitucion para /\
-sust (And t1 t2) (Sustit (Var i) (Var j)) = And (sust t1 ((Var i)=:(Var j))) (sust t2 ((Var i)=:(Var j)))
-sust (And t1 t2) (Sustit t3 (Var j)) = And (sust t1 (t3=:(Var j))) (sust t2 (t3=:(Var j)))
+sust' (And t1 t2) (Sustit (Var i) (Var j)) = And (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
+sust' (And t1 t2) (Sustit t3 (Var j)) = And (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
 --sustitucion para ==>
-sust (Imp t1 t2) (Sustit (Var i) (Var j)) = Imp (sust t1 ((Var i)=:(Var j))) (sust t2 ((Var i)=:(Var j)))
-sust (Imp t1 t2) (Sustit t3 (Var j)) = Imp (sust t1 (t3=:(Var j))) (sust t2 (t3=:(Var j)))
+sust' (Imp t1 t2) (Sustit (Var i) (Var j)) = Imp (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
+sust' (Imp t1 t2) (Sustit t3 (Var j)) = Imp (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
 --sustitucion para <==>
-sust (Equiv t1 t2) (Sustit (Var i) (Var j)) = Equiv (sust t1 ((Var i)=:(Var j))) (sust t2 ((Var i)=:(Var j)))
-sust (Equiv t1 t2) (Sustit t3 (Var j)) = Equiv (sust t1 (t3=:(Var j))) (sust t2 (t3=:(Var j)))
+sust' (Equiv t1 t2) (Sustit (Var i) (Var j)) = Equiv (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
+sust' (Equiv t1 t2) (Sustit t3 (Var j)) = Equiv (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
 --sustitucion para !<==>
-sust (Inequiv t1 t2) (Sustit (Var i) (Var j)) = Inequiv (sust t1 ((Var i)=:(Var j))) (sust t2 ((Var i)=:(Var j)))
-sust (Inequiv t1 t2) (Sustit t3 (Var j)) = Inequiv (sust t1 (t3=:(Var j))) (sust t2 (t3=:(Var j)))
+sust' (Inequiv t1 t2) (Sustit (Var i) (Var j)) = Inequiv (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
+sust' (Inequiv t1 t2) (Sustit t3 (Var j)) = Inequiv (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
 --sustitucion para ¬
-sust (Neg t1) (Sustit (Var i) (Var j)) = Neg (sust t1 ((Var i)=:(Var j)))
-sust (Neg t1) (Sustit t3 (Var j)) = Neg (sust t1 (t3=:(Var j)))
+sust' (Neg t1) (Sustit (Var i) (Var j)) = Neg (sust' t1 ((Var i)=:(Var j)))
+sust' (Neg t1) (Sustit t3 (Var j)) = Neg (sust' t1 (t3=:(Var j)))
 
-
+-- Instancias de la sustitucion para los tres tipos (simple, doble, triple)
 class Sustitution s where
-	sust' ::Term -> s -> Term
+	sust ::Term -> s -> Term
 
 instance Sustitution Sust where
-	sust' t (Sustit t1 t2) = sust t (t1=:t2)
+	sust t (Sustit t1 t2) = sust' t (t1=:t2)
 
 instance Sustitution (Term,Sust,Term) where
-	sust' t (t1,Sustit t2 t3,t4) = sust (sust (sust t (fresca=:t1)) (t4=:t2)) (t3=:fresca)
+	sust t (t1,Sustit t2 t3,t4) = sust' (sust' (sust' t (fresca=:t3)) (t2=:t4)) (t1=:fresca)
 
 instance Sustitution (Term,Term,Sust,Term,Term) where
-	sust' t (t1,t5,Sustit t2 t3,t4,t6) = sust(sust(sust (sust (sust t (fresca=:t1)) (fresca'=:t5)) (t3=:fresca)) (t6=:t2)) (t4=:fresca')
+	sust t (t1,t2,Sustit t3 t4,t5,t6) = sust' (sust' (sust' (sust' (sust' t (fresca=:t4)) (fresca'=:t5)) (t3=:t6)) (t1=:fresca)) (t2=:fresca')
 
 --instace Sustitution 
 

@@ -83,8 +83,9 @@ y = Var 'y'
 z:: Term
 z = Var 'z'
 
+--Variables frescas para evitar problemas en sustitucion simultanea (ejemplo: (a\/b)[a,b:=b,a])
 fresca :: Term
-fresca = Var 'P'
+fresca = Var 'A'
 
 fresca' :: Term
-fresca' = Var 'A'
+fresca' = Var 'B'

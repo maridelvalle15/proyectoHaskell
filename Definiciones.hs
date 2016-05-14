@@ -74,6 +74,11 @@ instance Sustitution (Term,Sust,Term) where
 instance Sustitution (Term,Term,Sust,Term,Term) where
 	sust t (t1,t2,Sustit t3 t4,t5,t6) = sust' (sust' (sust' (sust' (sust' t (fresca=:t4)) (fresca'=:t5)) (t3=:t6)) (t1=:fresca)) (t2=:fresca')
 
+
+
+instantiate :: Equation -> Sust -> Equation
+instantiate (Igual t1 t2) (Sustit t3 (Var s2)) = Igual (sust t1 (Sustit t3 (Var s2))) (sust t2 (Sustit t3 (Var s2)))
+
 -- ** COMPARAR EXPRESIONES **
 -- comparar lados de una ecuacion
 compare_show :: Term -> Equation -> Term

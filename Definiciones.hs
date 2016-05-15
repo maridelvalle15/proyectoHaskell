@@ -86,7 +86,7 @@ showEquation(Igual t1 t2) = showTerm t1 ++ " === " ++ showTerm t2
 
 
 -- *** SHOW SUST *** --
-showSust :: Sust -> String
+showSust :: (Sust) -> String
 --Mostrar sustitucion
 showSust(Sustit t1 t2) = showTerm t1 ++ " =: " ++ showTerm t2
 
@@ -165,12 +165,14 @@ done (Igual t1 t2) tf = do
 
 
 -- *** FUNCION QUE RECIBE LOS ARGUMENTOS DEL HINT ***
-statement :: Sustitution a => Float -> Term -> a -> Term -> Term -> Term -> Term -> Term -> IO Term
+--statement :: Sustitution a => Float -> Term -> a -> Term -> Term -> Term -> Term -> Term -> IO Term
 statement num with obj_sust using lambda z zterm ti= do
 													let x = step ti num obj_sust z zterm
-													putStrLn $ id "===<statement "++show(num)++" with substitution "++" using lambda "++showTerm(z)++" "++showTerm(zterm)++">"
+													putStrLn $ id "===<statement "++show(num)++" with " ++ show (obj_sust) ++" using lambda "++showTerm(z)++" ("++showTerm(zterm)++")>"
 													print(x)
 													return (x)
+
+--hola obj 
 
 
 -- *** INSTANCE ***
@@ -223,7 +225,7 @@ instance Eq Term where
 class Sustitution s where
 	sust ::Term -> s -> Term
 
-instance Sustitution Sust where
+instance Sustitution (Sust) where
 	sust t (Sustit t1 t2) = sust' t (t1=:t2)
 
 instance Sustitution (Term,Sust,Term) where

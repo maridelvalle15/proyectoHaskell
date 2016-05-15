@@ -122,7 +122,7 @@ sust' (Neg t1) (Sustit t3 (Var j)) = Neg (sust' t1 (t3=:(Var j)))
 compare_show :: Term -> Equation -> Term
 compare_show t1 (Igual t2 t3) = if t1==t2 then t3 
 								else if t1==t3 then t2
-								else error "Mala aplicacion de teorema"
+								else error "Invalid inference rule"
 
 
 -- *** INSTANCIAR **
@@ -147,21 +147,30 @@ step t1 num s z term = compare_show t1 (infer num s z term)
 
 -- *** FUNCIONES DE INICIO Y FIN DE LA DEMOSTRACION ***
 -- inicio
+proof :: Equation -> IO Term
 proof (Igual t1 t2) = do
 						let x = t1
 						putStrLn $ id "prooving "++showEquation(Igual t1 t2)
 						putStrLn $ id ""
 						print x
+						return (x)
 -- fin
-done :: Equation -> Term
-done (Igual t1 t2) = t2
+done :: Equation -> Term -> IO()
+done (Igual t1 t2) tf = do
+						let x = t2
+						if t2==tf 
+							then putStrLn $ id "proof successful"
+							else putStrLn $ id "proof unsuccessful"
+
 
 
 -- *** FUNCION QUE RECIBE LOS ARGUMENTOS DEL HINT ***
-statement num with (Sustit t1 t2) using lambda (Var i) = do
-															let x = t1
-															let th = prop num
-															print th
+statement :: Sustitution a => Float -> Term -> a -> Term -> Term -> Term -> Term -> Term -> IO Term
+statement num with obj_sust using lambda z zterm ti= do
+													let x = step ti num obj_sust z zterm
+													putStrLn $ id "===<statement "++show(num)++" with substitution "++" using lambda "++showTerm(z)++" "++showTerm(zterm)++">"
+													print(x)
+													return (x)
 
 
 -- *** INSTANCE ***

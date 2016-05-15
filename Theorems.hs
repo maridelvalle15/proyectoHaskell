@@ -1,5 +1,5 @@
 module Theorems where
-import Abecedario
+import Terminos
 
 prop :: Float -> Equation
 prop num

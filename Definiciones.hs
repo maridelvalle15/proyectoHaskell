@@ -1,68 +1,7 @@
 {-# LANGUAGE FlexibleInstances#-}
 module Definiciones where 
 import Theorems
-import Abecedario 
-
-
--- *** SUSTITUCION ***
-sust' :: Term -> (Sust) -> Term
-sust' Truee (Sustit t2 t3) = Truee
-sust' Falsee (Sustit t2 t3) = Falsee
-sust' (Var i) (Sustit (Var j) (Var k)) = if i==k then (Var j) else (Var i)
-sust' (Var i) (Sustit t1 (Var j)) = if i==j then t1 else (Var i)
--- sustitucion para \/
-sust' (Or t1 t2) (Sustit (Var i) (Var j)) = Or (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
-sust' (Or t1 t2) (Sustit t3 (Var j)) = Or (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
---sustitucion para /\
-sust' (And t1 t2) (Sustit (Var i) (Var j)) = And (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
-sust' (And t1 t2) (Sustit t3 (Var j)) = And (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
---sustitucion para ==>
-sust' (Imp t1 t2) (Sustit (Var i) (Var j)) = Imp (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
-sust' (Imp t1 t2) (Sustit t3 (Var j)) = Imp (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
---sustitucion para <==>
-sust' (Equiv t1 t2) (Sustit (Var i) (Var j)) = Equiv (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
-sust' (Equiv t1 t2) (Sustit t3 (Var j)) = Equiv (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
---sustitucion para !<==>
-sust' (Inequiv t1 t2) (Sustit (Var i) (Var j)) = Inequiv (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
-sust' (Inequiv t1 t2) (Sustit t3 (Var j)) = Inequiv (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
---sustitucion para ¬
-sust' (Neg t1) (Sustit (Var i) (Var j)) = Neg (sust' t1 ((Var i)=:(Var j)))
-sust' (Neg t1) (Sustit t3 (Var j)) = Neg (sust' t1 (t3=:(Var j)))
-
--- Instancias de la sustitucion para los tres tipos (simple, doble, triple)
-class Sustitution s where
-	sust ::Term -> s -> Term
-
-instance Sustitution Sust where
-	sust t (Sustit t1 t2) = sust' t (t1=:t2)
-
-instance Sustitution (Term,Sust,Term) where
-	sust t (t1,Sustit t2 t3,t4) = sust' (sust' (sust' t (fresca=:t3)) (t2=:t4)) (t1=:fresca)
-
-instance Sustitution (Term,Term,Sust,Term,Term) where
-	sust t (t1,t2,Sustit t3 t4,t5,t6) = sust' (sust' (sust' (sust' (sust' t (fresca=:t4)) (fresca'=:t5)) (t3=:t6)) (t1=:fresca)) (t2=:fresca')
-
-
-
-instantiate :: Sustitution a => Equation -> a -> Equation
-instantiate (Igual t1 t2) a = Igual (sust t1 a) (sust t2 a)
-
-leibniz :: Equation -> Term -> Term -> Equation
-leibniz (Igual t1 t2) var t = Igual (sust t (t1=:var)) (sust t (t2=:var))
-
-infer :: Sustitution a => Float -> a -> Term -> Term -> Equation
-infer num obj_sust z term = leibniz (instantiate (prop num) obj_sust) z term 
-
-step :: Sustitution a => Term -> Float -> a -> Term -> Term -> Term
-step t1 num s z term = compare_show t1 (infer num s z term)
-
-
--- ** COMPARAR EXPRESIONES **
--- comparar lados de una ecuacion
-compare_show :: Term -> Equation -> Term
-compare_show t1 (Igual t2 t3) = if t1==t2 then t3 
-								else if t1==t3 then t2
-								else error "Mala aplicacion de teorema"
+import Terminos
 
 
 -- *** SHOW TERMS ***
@@ -140,16 +79,89 @@ showTerm(Truee) = "true"
 showTerm(Falsee) = "false"
 
 
+-- *** SHOW EQUATION *** --
+showEquation :: Equation -> String
+--Mostrar sustitucion
+showEquation(Igual t1 t2) = showTerm t1 ++ " === " ++ showTerm t2
+
+
 -- *** SHOW SUST *** --
 showSust :: Sust -> String
 --Mostrar sustitucion
 showSust(Sustit t1 t2) = showTerm t1 ++ " =: " ++ showTerm t2
 
 
--- *** SHOW EQUATION *** --
-showEquation :: Equation -> String
---Mostrar sustitucion
-showEquation(Igual t1 t2) = showTerm t1 ++ " === " ++ showTerm t2
+-- *** SUSTITUCION ***
+sust' :: Term -> (Sust) -> Term
+sust' Truee (Sustit t2 t3) = Truee
+sust' Falsee (Sustit t2 t3) = Falsee
+sust' (Var i) (Sustit (Var j) (Var k)) = if i==k then (Var j) else (Var i)
+sust' (Var i) (Sustit t1 (Var j)) = if i==j then t1 else (Var i)
+-- sustitucion para \/
+sust' (Or t1 t2) (Sustit (Var i) (Var j)) = Or (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
+sust' (Or t1 t2) (Sustit t3 (Var j)) = Or (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
+--sustitucion para /\
+sust' (And t1 t2) (Sustit (Var i) (Var j)) = And (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
+sust' (And t1 t2) (Sustit t3 (Var j)) = And (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
+--sustitucion para ==>
+sust' (Imp t1 t2) (Sustit (Var i) (Var j)) = Imp (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
+sust' (Imp t1 t2) (Sustit t3 (Var j)) = Imp (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
+--sustitucion para <==>
+sust' (Equiv t1 t2) (Sustit (Var i) (Var j)) = Equiv (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
+sust' (Equiv t1 t2) (Sustit t3 (Var j)) = Equiv (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
+--sustitucion para !<==>
+sust' (Inequiv t1 t2) (Sustit (Var i) (Var j)) = Inequiv (sust' t1 ((Var i)=:(Var j))) (sust' t2 ((Var i)=:(Var j)))
+sust' (Inequiv t1 t2) (Sustit t3 (Var j)) = Inequiv (sust' t1 (t3=:(Var j))) (sust' t2 (t3=:(Var j)))
+--sustitucion para ¬
+sust' (Neg t1) (Sustit (Var i) (Var j)) = Neg (sust' t1 ((Var i)=:(Var j)))
+sust' (Neg t1) (Sustit t3 (Var j)) = Neg (sust' t1 (t3=:(Var j)))
+
+
+-- ** COMPARAR EXPRESIONES **
+-- comparar lados de una ecuacion
+compare_show :: Term -> Equation -> Term
+compare_show t1 (Igual t2 t3) = if t1==t2 then t3 
+								else if t1==t3 then t2
+								else error "Mala aplicacion de teorema"
+
+
+-- *** INSTANCIAR **
+instantiate :: Sustitution a => Equation -> a -> Equation
+instantiate (Igual t1 t2) a = Igual (sust t1 a) (sust t2 a)
+
+
+-- *** APLICAR LA REGLA DE LEIBNIZ ***
+leibniz :: Equation -> Term -> Term -> Equation
+leibniz (Igual t1 t2) var t = Igual (sust t (t1=:var)) (sust t (t2=:var))
+
+
+-- ** INFERENCIA **
+infer :: Sustitution a => Float -> a -> Term -> Term -> Equation
+infer num obj_sust z term = leibniz (instantiate (prop num) obj_sust) z term 
+
+
+-- ** APLICAR TODO ***
+step :: Sustitution a => Term -> Float -> a -> Term -> Term -> Term
+step t1 num s z term = compare_show t1 (infer num s z term)
+
+
+-- *** FUNCIONES DE INICIO Y FIN DE LA DEMOSTRACION ***
+-- inicio
+proof (Igual t1 t2) = do
+						let x = t1
+						putStrLn $ id "prooving "++showEquation(Igual t1 t2)
+						putStrLn $ id ""
+						print x
+-- fin
+done :: Equation -> Term
+done (Igual t1 t2) = t2
+
+
+-- *** FUNCION QUE RECIBE LOS ARGUMENTOS DEL HINT ***
+statement num with (Sustit t1 t2) using lambda (Var i) = do
+															let x = t1
+															let th = prop num
+															print th
 
 
 -- *** INSTANCE ***
@@ -198,17 +210,15 @@ instance Eq Term where
 						(Inequiv t1 t2) == (Inequiv t3 t4) = (t1 == t3) && (t2 == t4)
 						_ == (Inequiv t3 t4) = False
 						(Inequiv t3 t4) == _ = False
+-- Instancias de la sustitucion para los tres tipos (simple, doble, triple)
+class Sustitution s where
+	sust ::Term -> s -> Term
 
-proof (Igual t1 t2) = do
-						let x = t1
-						putStrLn $ id "prooving "++showEquation(Igual t1 t2)
-						putStrLn $ id ""
-						print x
+instance Sustitution Sust where
+	sust t (Sustit t1 t2) = sust' t (t1=:t2)
 
-done :: Equation -> Term
-done (Igual t1 t2) = t2
+instance Sustitution (Term,Sust,Term) where
+	sust t (t1,Sustit t2 t3,t4) = sust' (sust' (sust' t (fresca=:t3)) (t2=:t4)) (t1=:fresca)
 
-statement num with (Sustit t1 t2) using lambda (Var i) = do
-															let x = t1
-															let th = prop num
-															print th
+instance Sustitution (Term,Term,Sust,Term,Term) where
+	sust t (t1,t2,Sustit t3 t4,t5,t6) = sust' (sust' (sust' (sust' (sust' t (fresca=:t4)) (fresca'=:t5)) (t3=:t6)) (t1=:fresca)) (t2=:fresca')

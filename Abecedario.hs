@@ -2,7 +2,7 @@ module Abecedario where
 data Term = Var Char | Neg Term |Or Term Term | And Term Term | Imp Term Term |
 			Equiv Term Term | Inequiv Term Term | Truee | Falsee
 data Equation = Igual Term Term
-data Sust = Sustit Term Term | SustitDos (Term,Sust,Term) | SustitTres (Term,Term,Sust,Term,Term)
+data Sust = Sustit Term Term
 
 
 a:: Term

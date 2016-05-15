@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FlexibleInstances,RankNTypes,FlexibleContexts #-}
 module Definiciones where 
 import Abecedario 
 
@@ -75,12 +75,25 @@ instance Sustitution (Term,Term,Sust,Term,Term) where
 	sust t (t1,t2,Sustit t3 t4,t5,t6) = sust' (sust' (sust' (sust' (sust' t (fresca=:t4)) (fresca'=:t5)) (t3=:t6)) (t1=:fresca)) (t2=:fresca')
 
 
-
-instantiate :: Equation -> Sust -> Equation
-instantiate (Igual t1 t2) (Sustit t3 (Var s2)) = Igual (sust t1 (t3=:(Var s2))) (sust t2 (t3=:(Var s2)))
+instantiate :: Sustitution a => Equation -> a -> Equation
+instantiate (Igual t1 t2) a = Igual (sust t1 a) (sust t2 a)
 
 leibniz :: Equation -> Term -> Term -> Equation
 leibniz (Igual t1 t2) var t = Igual (sust t (t1=:var)) (sust t (t2=:var))
+
+{-
+--infer :: Float -> Equation -> Sust -> Term -> Term -> Equation
+infer num t1 obj_sust z term = do
+													if z == term 
+														then do
+															-- buscamos el teorema 
+															let teorem = prop num
+															-- aplicamos sustitucion al teorema
+															let susti = instantiate teorem obj_sust
+															let result = compare_show t1 susti
+															print result
+														else putStrLn $ id "Hola"
+														-}
 
 -- ** COMPARAR EXPRESIONES **
 -- comparar lados de una ecuacion

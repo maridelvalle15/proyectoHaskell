@@ -1,39 +1,7 @@
-{-# LANGUAGE FlexibleInstances,RankNTypes,FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances#-}
 module Definiciones where 
+import Theorems
 import Abecedario 
-
-
--- *** TERMINOS VALIDOS ***
-true :: Term
-true = Truee
-false :: Term
-false = Falsee
-
-
--- *** OPERADORES ***
-neg :: Term -> Term
-neg x = Neg x
-infixl 8 \/
-(\/) :: Term -> Term -> Term
-x \/ y = Or x y
-infixl 7 /\
-(/\) :: Term -> Term -> Term
-x /\ y = And x y
-infixr 6 ==>
-(==>) :: Term -> Term -> Term
-x ==> y = Imp x y
-infixl 5 <==>
-(<==>) :: Term -> Term -> Term
-x <==> y =  Equiv x y
-infixl 4 !<==>
-(!<==>) :: Term -> Term -> Term
-x !<==> y =  Inequiv x y
-infix 3 ===
-(===) :: Term -> Term -> Equation
-x === y = Igual x y
-infix 1 =:
-(=:) :: Term -> Term -> Sust     
-x =: y = Sustit x y 
 
 
 -- *** SUSTITUCION ***
@@ -239,13 +207,6 @@ proof (Igual t1 t2) = do
 
 done :: Equation -> Term
 done (Igual t1 t2) = t2
-
-prop :: Float -> Equation
-prop num
-	| num == 3.1 = (p <==> q) <==> r === p <==> (q <==> r)
-	| num == 3.2 = (p <==> q) <==> (q <==>p ) === true
-	| num == 3.3 = (p <==> q) <==> q === p
-	| otherwise = error "The statement doesn't exists"
 
 statement num with (Sustit t1 t2) using lambda (Var i) = do
 															let x = t1

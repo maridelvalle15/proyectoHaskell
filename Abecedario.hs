@@ -96,3 +96,35 @@ using :: Term
 using = Var 'X'
 lambda :: Term
 lambda = Var 'Y'
+
+-- *** TERMINOS VALIDOS ***
+true :: Term
+true = Truee
+false :: Term
+false = Falsee
+
+
+-- *** OPERADORES ***
+neg :: Term -> Term
+neg x = Neg x
+infixl 8 \/
+(\/) :: Term -> Term -> Term
+x \/ y = Or x y
+infixl 7 /\
+(/\) :: Term -> Term -> Term
+x /\ y = And x y
+infixr 6 ==>
+(==>) :: Term -> Term -> Term
+x ==> y = Imp x y
+infixl 5 <==>
+(<==>) :: Term -> Term -> Term
+x <==> y =  Equiv x y
+infixl 4 !<==>
+(!<==>) :: Term -> Term -> Term
+x !<==> y =  Inequiv x y
+infix 3 ===
+(===) :: Term -> Term -> Equation
+x === y = Igual x y
+infix 1 =:
+(=:) :: Term -> Term -> Sust     
+x =: y = Sustit x y 

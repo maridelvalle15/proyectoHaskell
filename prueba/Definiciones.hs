@@ -1,7 +1,7 @@
 {-# LANGUAGE FlexibleInstances#-}
 module Definiciones where 
 import Theorems
-import Term
+import Term 
 
 
 -- *** SHOW TERMS ***
@@ -25,113 +25,54 @@ showTerm(And (Neg i)(Var j)) = showTerm(Neg i) ++ " /\\ " ++ showTerm(Var j)
 showTerm(And (Neg t) t1) = showTerm(Neg t) ++ " /\\ "  ++ showTerm(t1) 
 showTerm(And t1 (Neg t)) = showTerm(t1) ++  " /\\ " ++ showTerm(Neg t) 
  --Mostrar ¬ ==>
-showTerm(Imp (Var i) (Neg t)) = showTerm(Var i) ++ " ==> " ++ showTerm(Neg t)
-showTerm(Imp (Neg i)(Var j)) = showTerm(Neg i) ++ " ==> " ++ showTerm(Var j)
 showTerm(Imp (Neg t1)(Neg t2)) = showTerm(Neg t1) ++ " ==> " ++ showTerm(Neg t2)
 showTerm(Imp (Neg t) t1) = showTerm(Neg t) ++ " ==> " ++ showTerm(t1)
 showTerm(Imp t1 (Neg t)) = showTerm(t1) ++ " ==> " ++ showTerm(Neg t) 
 showTerm (Neg (Imp t1 t2)) = "¬(" ++ showTerm (Imp t1 t2) ++ ")"
-
+showTerm(Imp (Var i) (Neg t)) = showTerm(Var i) ++ " ==> " ++ showTerm(Neg t)
+showTerm(Imp (Neg i)(Var j)) = showTerm(Neg i) ++ " ==> " ++ showTerm(Var j)
  --Mostrar ¬ <==>
-showTerm(Equiv (Var i) (Neg t)) = showTerm(Var i) ++ " <==> " ++ showTerm(Neg t)
-showTerm(Equiv (Neg i)(Var j)) = showTerm(Neg i) ++ " <==> " ++ showTerm(Var j)
 showTerm(Equiv (Neg t1)(Neg t2)) = showTerm(Neg t1) ++ " <==> " ++ showTerm(Neg t2)
 showTerm(Equiv (Neg t) t1) = showTerm(Neg t) ++ " <==> " ++ showTerm(t1)
 showTerm(Equiv t1 (Neg t)) = showTerm(t1) ++ " <==> " ++ showTerm(Neg t) 
 showTerm (Neg (Equiv t1 t2)) = "¬(" ++ showTerm (Equiv t1 t2) ++ ")"
- --Mostrar ¬ !<==> 
-showTerm(Inequiv (Var i) (Neg t)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Neg t)
-showTerm(Inequiv (Neg i)(Var j)) = showTerm(Neg i) ++ " !<==> " ++ showTerm(Var j) 
+showTerm(Equiv (Var i) (Neg t)) = showTerm(Var i) ++ " <==> " ++ showTerm(Neg t)
+showTerm(Equiv (Neg i)(Var j)) = showTerm(Neg i) ++ " <==> " ++ showTerm(Var j)
+ --Mostrar ¬ !<==>
 showTerm(Inequiv (Neg t1)(Neg t2)) = showTerm(Neg t1) ++ " !<==> " ++ showTerm(Neg t2)
 showTerm(Inequiv (Neg t) t1) = showTerm(Neg t) ++ " !<==> " ++ showTerm(t1)
 showTerm(Inequiv t1 (Neg t)) = showTerm(t1) ++ " !<==> " ++ showTerm(Neg t) 
 showTerm (Neg (Inequiv t1 t2)) = "¬(" ++ showTerm (Inequiv t1 t2) ++ ")"
-
+showTerm(Inequiv (Var i) (Neg t)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Neg t)
+showTerm(Inequiv (Neg i)(Var j)) = showTerm(Neg i) ++ " !<==> " ++ showTerm(Var j)
 -- Mostrar ¬ termino
 showTerm (Neg t1) = "¬(" ++ showTerm t1 ++ ")"
 
 --Mostrar \/
-showTerm(Or (Falsee)(Falsee)) = showTerm(Falsee) ++ " \\/ " ++ showTerm(Falsee)
-showTerm(Or (Falsee)(Truee)) = showTerm(Falsee) ++ " \\/ " ++ showTerm(Truee)
-showTerm(Or (Truee)(Falsee)) = showTerm(Truee) ++ " \\/ " ++ showTerm(Falsee)
-showTerm(Or (Truee)(Truee)) = showTerm(Truee) ++ " \\/ " ++ showTerm(Truee)
-showTerm(Or (Truee)(Var i)) = showTerm(Truee) ++ " \\/ " ++ showTerm(Var i)
 showTerm(Or (Var i)(Truee)) = showTerm(Var i) ++ " \\/ " ++ showTerm(Truee)
 showTerm(Or (Truee) t) = showTerm(Truee) ++ " \\/ (" ++ showTerm(t) ++ ")"
 showTerm(Or t (Truee)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Truee)
-showTerm(Or (Falsee)(Var i)) = showTerm(Falsee) ++ " \\/ " ++ showTerm(Var i)
-showTerm(Or (Var i)(Falsee)) = showTerm(Var i) ++ " \\/ " ++ showTerm(Falsee)
-showTerm(Or (Falsee) t) = showTerm(Falsee) ++ " \\/ (" ++ showTerm(t) ++ ")"
-showTerm(Or t (Falsee)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Falsee)
 showTerm(Or (Var i)(Var j)) = showTerm(Var i) ++ " \\/ " ++ showTerm(Var j)
 showTerm(Or (Var i) t) = showTerm(Var i) ++ " \\/ (" ++ showTerm(t) ++ ")"
 showTerm(Or t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Var i)
 showTerm (Or t1 t2) = "(" ++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")"
 
  --Mostrar /\
-showTerm(And (Falsee)(Falsee)) = showTerm(Falsee) ++ " /\\ " ++ showTerm(Falsee)
-showTerm(And (Falsee)(Truee)) = showTerm(Falsee) ++ " /\\ " ++ showTerm(Truee)
-showTerm(And (Truee)(Falsee)) = showTerm(Truee) ++ " /\\ " ++ showTerm(Falsee)
-showTerm(And (Truee)(Truee)) = showTerm(Truee) ++ " /\\ " ++ showTerm(Truee)
-showTerm(And (Truee)(Var i)) = showTerm(Truee) ++ " /\\ " ++ showTerm(Var i)
-showTerm(And (Var i)(Truee)) = showTerm(Var i) ++ " /\\ " ++ showTerm(Truee)
-showTerm(And (Truee) t) = showTerm(Truee) ++ "/\\ (" ++ showTerm(t) ++ ")"
-showTerm(And t (Truee)) = "(" ++ showTerm(t) ++ ")" ++ " /\\ " ++ showTerm(Truee)
-showTerm(And (Falsee)(Var i)) = showTerm(Falsee) ++ " /\\ " ++ showTerm(Var i)
-showTerm(And (Var i)(Falsee)) = showTerm(Var i) ++ " /\\ " ++ showTerm(Falsee)
-showTerm(And (Falsee) t) = showTerm(Falsee) ++ " /\\ (" ++ showTerm(t) ++ ")"
-showTerm(And t (Falsee)) = "(" ++ showTerm(t) ++ ")" ++ " /\\ " ++ showTerm(Falsee)
 showTerm(And (Var i)(Var j)) = showTerm(Var i) ++ " /\\ " ++ showTerm(Var j)
 showTerm(And (Var i) t) = showTerm(Var i) ++ " /\\ (" ++ showTerm(t) ++ ")"
-showTerm(And t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ "/\\ " ++ showTerm(Var i) 
+showTerm(And t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " /\\ " ++ showTerm(Var i) 
 showTerm (And t1 t2) = "(" ++ showTerm t1 ++ ") /\\ (" ++ showTerm t2 ++ ")"
  --Mostrar ==>
-showTerm(Imp (Falsee)(Falsee)) = showTerm(Falsee) ++ " ==> " ++ showTerm(Falsee)
-showTerm(Imp (Falsee)(Truee)) = showTerm(Falsee) ++ " ==> " ++ showTerm(Truee)
-showTerm(Imp (Truee)(Falsee)) = showTerm(Truee) ++ " ==> " ++ showTerm(Falsee)
-showTerm(Imp (Truee)(Truee)) = showTerm(Truee) ++ " ==> " ++ showTerm(Truee)
-showTerm(Imp (Truee)(Var i)) = showTerm(Truee) ++ " ==> " ++ showTerm(Var i)
-showTerm(Imp (Var i)(Truee)) = showTerm(Var i) ++ " ==> " ++ showTerm(Truee)
-showTerm(Imp (Truee) t) = showTerm(Truee) ++ "==> (" ++ showTerm(t) ++ ")"
-showTerm(Imp t (Truee)) = "(" ++ showTerm(t) ++ ")" ++ " ==> " ++ showTerm(Truee)
-showTerm(Imp (Falsee)(Var i)) = showTerm(Falsee) ++ " ==> " ++ showTerm(Var i)
-showTerm(Imp (Var i)(Falsee)) = showTerm(Var i) ++ " ==> " ++ showTerm(Falsee)
-showTerm(Imp (Falsee) t) = showTerm(Falsee) ++ " ==> (" ++ showTerm(t) ++ ")"
-showTerm(Imp t (Falsee)) = "(" ++ showTerm(t) ++ ")" ++ " ==> " ++ showTerm(Falsee)
 showTerm(Imp (Var i)(Var j)) = showTerm(Var i) ++ " ==> " ++ showTerm(Var j)
 showTerm(Imp (Var i) t) = showTerm(Var i) ++ " ==> (" ++ showTerm(t) ++ ")"
 showTerm(Imp t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " ==> " ++ showTerm(Var i) 
 showTerm (Imp t1 t2) = "(" ++ showTerm t1 ++ ") ==> (" ++ showTerm t2 ++ ")"
  --Mostrar <==>
-showTerm(Equiv (Falsee)(Falsee)) = showTerm(Falsee) ++ " <==> " ++ showTerm(Falsee)
-showTerm(Equiv (Falsee)(Truee)) = showTerm(Falsee) ++ " <==> " ++ showTerm(Truee)
-showTerm(Equiv (Truee)(Falsee)) = showTerm(Truee) ++ " <==> " ++ showTerm(Falsee)
-showTerm(Equiv (Truee)(Truee)) = showTerm(Truee) ++ " <==> " ++ showTerm(Truee)
-showTerm(Equiv (Truee)(Var i)) = showTerm(Truee) ++ " <==> " ++ showTerm(Var i)
-showTerm(Equiv (Var i)(Truee)) = showTerm(Var i) ++ " <==> " ++ showTerm(Truee)
-showTerm(Equiv (Truee) t) = showTerm(Truee) ++ " <==> (" ++ showTerm(t) ++ ")"
-showTerm(Equiv t (Truee)) = "(" ++ showTerm(t) ++ ")" ++ " <==> " ++ showTerm(Truee)
-showTerm(Equiv (Falsee)(Var i)) = showTerm(Falsee) ++ " <==> " ++ showTerm(Var i)
-showTerm(Equiv (Var i)(Falsee)) = showTerm(Var i) ++ " <==> " ++ showTerm(Falsee)
-showTerm(Equiv (Falsee) t) = showTerm(Falsee) ++ " <==> (" ++ showTerm(t) ++ ")"
-showTerm(Equiv t (Falsee)) = "(" ++ showTerm(t) ++ ")" ++ " <==> " ++ showTerm(Falsee)
 showTerm(Equiv (Var i)(Var j)) = showTerm(Var i) ++ " <==> " ++ showTerm(Var j)
 showTerm(Equiv (Var i) t) = showTerm(Var i) ++ " <==> (" ++ showTerm(t) ++ ")"
 showTerm(Equiv t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " <==> " ++ showTerm(Var i) 
 showTerm (Equiv t1 t2) = "(" ++ showTerm t1 ++ ") <==> (" ++ showTerm t2 ++ ")"
  --Mostrar !<==>
-showTerm(Inequiv (Falsee)(Falsee)) = showTerm(Falsee) ++ " !<==> " ++ showTerm(Falsee)
-showTerm(Inequiv (Falsee)(Truee)) = showTerm(Falsee) ++ " !<==> " ++ showTerm(Truee)
-showTerm(Inequiv (Truee)(Falsee)) = showTerm(Truee) ++ " !<==> " ++ showTerm(Falsee)
-showTerm(Inequiv (Truee)(Truee)) = showTerm(Truee) ++ " !<==> " ++ showTerm(Truee)
-showTerm(Inequiv (Truee)(Var i)) = showTerm(Truee) ++ " !<==> " ++ showTerm(Var i)
-showTerm(Inequiv (Var i)(Truee)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Truee)
-showTerm(Inequiv (Truee) t) = showTerm(Truee) ++ " !<==> (" ++ showTerm(t) ++ ")"
-showTerm(Inequiv t (Truee)) = "(" ++ showTerm(t) ++ ")" ++ " !<==> " ++ showTerm(Truee)
-showTerm(Inequiv (Falsee)(Var i)) = showTerm(Falsee) ++ " !<==> " ++ showTerm(Var i)
-showTerm(Inequiv (Var i)(Falsee)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Falsee)
-showTerm(Inequiv (Falsee) t) = showTerm(Falsee) ++ " !<==> (" ++ showTerm(t) ++ ")"
-showTerm(Inequiv t (Falsee)) = "(" ++ showTerm(t) ++ ")" ++ " !<==> " ++ showTerm(Falsee)
 showTerm(Inequiv (Var i)(Var j)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Var j)
 showTerm(Inequiv (Var i) t) = showTerm(Var i) ++ " !<==> (" ++ showTerm(t) ++ ")"
 showTerm(Inequiv t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " !<==> " ++ showTerm(Var i) 
@@ -148,7 +89,9 @@ showEquation(Igual t1 t2) = showTerm t1 ++ " === " ++ showTerm t2
 
 
 -- *** SHOW SUST *** --
-
+showSust :: (Sust) -> String
+--Mostrar sustitucion
+showSust(Sustit t1 t2) = showTerm t1 ++ " =: " ++ showTerm t2
 
 
 -- *** SUSTITUCION ***
@@ -223,11 +166,12 @@ done (Igual t1 t2) tf = do
 							else putStrLn $ id "proof unsuccessful"
 
 
+
 -- *** FUNCION QUE RECIBE LOS ARGUMENTOS DEL HINT ***
-statement :: Sustitution a => Float -> Term -> a -> Term -> Term -> Term -> Term -> Term -> IO Term
-statement num with (obj_sust) using lambda z zterm ti= do
+--statement :: Sustitution a => Float -> Term -> a -> Term -> Term -> Term -> Term -> Term -> IO Term
+statement num with obj_sust using lambda z zterm ti= do
 													let x = step ti num obj_sust z zterm
-													putStrLn $ id "===<statement "++show(num)++" with " ++ showSust(obj_sust) ++" using lambda "++showTerm(z)++" ("++showTerm(zterm)++")>"
+													putStrLn $ id "===<statement "++show(num)++" with " ++ show (obj_sust) ++" using lambda "++showTerm(z)++" ("++showTerm(zterm)++")>"
 													print(x)
 													return (x)
 
@@ -236,6 +180,7 @@ statement num with (obj_sust) using lambda z zterm ti= do
 
 -- *** INSTANCE ***
 instance Show Term where show = showTerm
+instance Show Sust where show = showSust
 instance Show Equation where show = showEquation
 -- comparar terminos
 instance Eq Term where 	
@@ -282,24 +227,12 @@ instance Eq Term where
 -- Instancias de la sustitucion para los tres tipos (simple, doble, triple)
 class Sustitution s where
 	sust ::Term -> s -> Term
-	showSust :: s -> String
-	
---instance Show (Sustitution Sust) where show (Sustit t1 t2) = showSust (Sustit t1 t2)
---instance Show (Sustitution (Term,Sust,Term)) where show = "wa"
---instance Show (Sustitution (Term,Term,Sust,Term,Term)) where show = "wa"
-
-
- --Mostrar sustitucion
-
 
 instance Sustitution (Sust) where
 	sust t (Sustit t1 t2) = sust' t (t1=:t2)
-	showSust(Sustit t1 t2) = "(" ++ showTerm t1 ++ " =: " ++ showTerm t2 ++ ")"
 
 instance Sustitution (Term,Sust,Term) where
 	sust t (t1,Sustit t2 t3,t4) = sust' (sust' (sust' t (fresca=:t3)) (t2=:t4)) (t1=:fresca)
-	showSust (t1,Sustit t2 t3,t4) = "("++showTerm t1++"," ++ showTerm t2 ++ " =: " ++ showTerm t3 ++ "," ++ showTerm t4 ++ ")"
 
 instance Sustitution (Term,Term,Sust,Term,Term) where
 	sust t (t1,t2,Sustit t3 t4,t5,t6) = sust' (sust' (sust' (sust' (sust' t (fresca=:t4)) (fresca'=:t5)) (t3=:t6)) (t1=:fresca)) (t2=:fresca')
-	showSust (t1,t2,Sustit t3 t4,t5,t6) = "("++showTerm t1++"," ++ showTerm t2 ++ "," ++ showTerm t3 ++  "=:"  ++ showTerm t4 ++ "," ++ showTerm t5 ++ "," ++ showTerm t6 ++ ")"

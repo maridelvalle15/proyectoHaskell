@@ -118,7 +118,7 @@ neg x = Neg x
 infixl 8 \/
 (\/) :: Term -> Term -> Term
 x \/ y = Or x y
-infixl 8 /\
+infixl 7 /\
 (/\) :: Term -> Term -> Term
 x /\ y = And x y
 infixr 6 ==>

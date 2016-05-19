@@ -1,6 +1,6 @@
-module Theorems3_5 where
-import Definiciones
-import Terminos
+-----------------------------------------
+-- Coloque los imports necesarios aqui --
+-----------------------------------------
 
 verify = let theorem = p === (q <==> q) <==> p in
          proof theorem

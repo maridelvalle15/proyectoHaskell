@@ -1,7 +1,7 @@
 {-# LANGUAGE FlexibleInstances#-}
 module Definiciones where 
 import Theorems
-import Terminos
+import Term
 
 
 -- *** SHOW TERMS ***
@@ -25,26 +25,28 @@ showTerm(And (Neg i)(Var j)) = showTerm(Neg i) ++ " /\\ " ++ showTerm(Var j)
 showTerm(And (Neg t) t1) = showTerm(Neg t) ++ " /\\ "  ++ showTerm(t1) 
 showTerm(And t1 (Neg t)) = showTerm(t1) ++  " /\\ " ++ showTerm(Neg t) 
  --Mostrar ¬ ==>
+showTerm(Imp (Var i) (Neg t)) = showTerm(Var i) ++ " ==> " ++ showTerm(Neg t)
+showTerm(Imp (Neg i)(Var j)) = showTerm(Neg i) ++ " ==> " ++ showTerm(Var j)
 showTerm(Imp (Neg t1)(Neg t2)) = showTerm(Neg t1) ++ " ==> " ++ showTerm(Neg t2)
 showTerm(Imp (Neg t) t1) = showTerm(Neg t) ++ " ==> " ++ showTerm(t1)
 showTerm(Imp t1 (Neg t)) = showTerm(t1) ++ " ==> " ++ showTerm(Neg t) 
 showTerm (Neg (Imp t1 t2)) = "¬(" ++ showTerm (Imp t1 t2) ++ ")"
-showTerm(Imp (Var i) (Neg t)) = showTerm(Var i) ++ " ==> " ++ showTerm(Neg t)
-showTerm(Imp (Neg i)(Var j)) = showTerm(Neg i) ++ " ==> " ++ showTerm(Var j)
+
  --Mostrar ¬ <==>
+showTerm(Equiv (Var i) (Neg t)) = showTerm(Var i) ++ " <==> " ++ showTerm(Neg t)
+showTerm(Equiv (Neg i)(Var j)) = showTerm(Neg i) ++ " <==> " ++ showTerm(Var j)
 showTerm(Equiv (Neg t1)(Neg t2)) = showTerm(Neg t1) ++ " <==> " ++ showTerm(Neg t2)
 showTerm(Equiv (Neg t) t1) = showTerm(Neg t) ++ " <==> " ++ showTerm(t1)
 showTerm(Equiv t1 (Neg t)) = showTerm(t1) ++ " <==> " ++ showTerm(Neg t) 
 showTerm (Neg (Equiv t1 t2)) = "¬(" ++ showTerm (Equiv t1 t2) ++ ")"
-showTerm(Equiv (Var i) (Neg t)) = showTerm(Var i) ++ " <==> " ++ showTerm(Neg t)
-showTerm(Equiv (Neg i)(Var j)) = showTerm(Neg i) ++ " <==> " ++ showTerm(Var j)
  --Mostrar ¬ !<==>
+showTerm(Inequiv (Var i) (Neg t)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Neg t)
+showTerm(Inequiv (Neg i)(Var j)) = showTerm(Neg i) ++ " !<==> " ++ showTerm(Var j) 
 showTerm(Inequiv (Neg t1)(Neg t2)) = showTerm(Neg t1) ++ " !<==> " ++ showTerm(Neg t2)
 showTerm(Inequiv (Neg t) t1) = showTerm(Neg t) ++ " !<==> " ++ showTerm(t1)
 showTerm(Inequiv t1 (Neg t)) = showTerm(t1) ++ " !<==> " ++ showTerm(Neg t) 
 showTerm (Neg (Inequiv t1 t2)) = "¬(" ++ showTerm (Inequiv t1 t2) ++ ")"
-showTerm(Inequiv (Var i) (Neg t)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Neg t)
-showTerm(Inequiv (Neg i)(Var j)) = showTerm(Neg i) ++ " !<==> " ++ showTerm(Var j)
+
 -- Mostrar ¬ termino
 showTerm (Neg t1) = "¬(" ++ showTerm t1 ++ ")"
 
@@ -86,9 +88,7 @@ showEquation(Igual t1 t2) = showTerm t1 ++ " === " ++ showTerm t2
 
 
 -- *** SHOW SUST *** --
-showSust :: (Sust) -> String
---Mostrar sustitucion
-showSust(Sustit t1 t2) = showTerm t1 ++ " =: " ++ showTerm t2
+
 
 
 -- *** SUSTITUCION ***
@@ -163,12 +163,11 @@ done (Igual t1 t2) tf = do
 							else putStrLn $ id "proof unsuccessful"
 
 
-
 -- *** FUNCION QUE RECIBE LOS ARGUMENTOS DEL HINT ***
---statement :: Sustitution a => Float -> Term -> a -> Term -> Term -> Term -> Term -> Term -> IO Term
-statement num with obj_sust using lambda z zterm ti= do
+statement :: Sustitution a => Float -> Term -> a -> Term -> Term -> Term -> Term -> Term -> IO Term
+statement num with (obj_sust) using lambda z zterm ti= do
 													let x = step ti num obj_sust z zterm
-													putStrLn $ id "===<statement "++show(num)++" with " ++ show (obj_sust) ++" using lambda "++showTerm(z)++" ("++showTerm(zterm)++")>"
+													putStrLn $ id "===<statement "++show(num)++" with " ++ showSust(obj_sust) ++" using lambda "++showTerm(z)++" ("++showTerm(zterm)++")>"
 													print(x)
 													return (x)
 
@@ -177,7 +176,6 @@ statement num with obj_sust using lambda z zterm ti= do
 
 -- *** INSTANCE ***
 instance Show Term where show = showTerm
-instance Show Sust where show = showSust
 instance Show Equation where show = showEquation
 -- comparar terminos
 instance Eq Term where 	
@@ -224,12 +222,24 @@ instance Eq Term where
 -- Instancias de la sustitucion para los tres tipos (simple, doble, triple)
 class Sustitution s where
 	sust ::Term -> s -> Term
+	showSust :: s -> String
+	
+--instance Show (Sustitution Sust) where show (Sustit t1 t2) = showSust (Sustit t1 t2)
+--instance Show (Sustitution (Term,Sust,Term)) where show = "wa"
+--instance Show (Sustitution (Term,Term,Sust,Term,Term)) where show = "wa"
+
+
+ --Mostrar sustitucion
+
 
 instance Sustitution (Sust) where
 	sust t (Sustit t1 t2) = sust' t (t1=:t2)
+	showSust(Sustit t1 t2) = "(" ++ showTerm t1 ++ " =: " ++ showTerm t2 ++ ")"
 
 instance Sustitution (Term,Sust,Term) where
 	sust t (t1,Sustit t2 t3,t4) = sust' (sust' (sust' t (fresca=:t3)) (t2=:t4)) (t1=:fresca)
+	showSust (t1,Sustit t2 t3,t4) = "("++showTerm t1++"," ++ showTerm t2 ++ " =: " ++ showTerm t3 ++ "," ++ showTerm t4 ++ ")"
 
 instance Sustitution (Term,Term,Sust,Term,Term) where
 	sust t (t1,t2,Sustit t3 t4,t5,t6) = sust' (sust' (sust' (sust' (sust' t (fresca=:t4)) (fresca'=:t5)) (t3=:t6)) (t1=:fresca)) (t2=:fresca')
+	showSust (t1,t2,Sustit t3 t4,t5,t6) = "("++showTerm t1++"," ++ showTerm t2 ++ "," ++ showTerm t3 ++  "=:"  ++ showTerm t4 ++ "," ++ showTerm t5 ++ "," ++ showTerm t6 ++ ")"

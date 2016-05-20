@@ -9,6 +9,8 @@ showTerm :: Term -> String
 showTerm(Var i) = [i]
 
 --Mostrar ¬
+showTerm (Neg Truee) = "¬true"
+showTerm (Neg Falsee) = "¬false"
 showTerm (Neg (Var i)) = "¬" ++ showTerm(Var i)
 --Mostrar ¬ \/
 showTerm(Or (Neg t1) (Neg t2)) = showTerm(Neg t1) ++ " \\/ " ++ showTerm(Neg t2)
@@ -100,7 +102,7 @@ showTerm(Imp (Falsee) t) = showTerm(Falsee) ++ " ==> (" ++ showTerm(t) ++ ")"
 showTerm(Imp t (Falsee)) = "(" ++ showTerm(t) ++ ")" ++ " ==> " ++ showTerm(Falsee)
 showTerm(Imp (Var i)(Var j)) = showTerm(Var i) ++ " ==> " ++ showTerm(Var j)
 showTerm(Imp (Var i) t) = showTerm(Var i) ++ " ==> (" ++ showTerm(t) ++ ")"
-showTerm(Imp t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " ==> " ++ showTerm(Var i) 
+showTerm(Imp t (Var i)) = showTerm(t) ++ " ==> " ++ showTerm(Var i) 
 showTerm (Imp t1 t2) = "(" ++ showTerm t1 ++ ") ==> (" ++ showTerm t2 ++ ")"
  --Mostrar <==>
 showTerm(Equiv (Falsee)(Falsee)) = showTerm(Falsee) ++ " <==> " ++ showTerm(Falsee)

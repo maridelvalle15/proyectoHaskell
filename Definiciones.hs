@@ -102,7 +102,7 @@ showTerm(Imp (Falsee) t) = showTerm(Falsee) ++ " ==> (" ++ showTerm(t) ++ ")"
 showTerm(Imp t (Falsee)) = "(" ++ showTerm(t) ++ ")" ++ " ==> " ++ showTerm(Falsee)
 showTerm(Imp (Var i)(Var j)) = showTerm(Var i) ++ " ==> " ++ showTerm(Var j)
 showTerm(Imp (Var i) t) = showTerm(Var i) ++ " ==> (" ++ showTerm(t) ++ ")"
-showTerm(Imp t (Var i)) = showTerm(t) ++ " ==> " ++ showTerm(Var i) 
+showTerm(Imp t (Var i)) = "(" ++ showTerm(t) ++ ") ==> " ++ showTerm(Var i) 
 showTerm (Imp t1 t2) = "(" ++ showTerm t1 ++ ") ==> (" ++ showTerm t2 ++ ")"
  --Mostrar <==>
 showTerm(Equiv (Falsee)(Falsee)) = showTerm(Falsee) ++ " <==> " ++ showTerm(Falsee)
@@ -135,9 +135,9 @@ showTerm(Inequiv (Var i)(Falsee)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Fal
 showTerm(Inequiv (Falsee) t) = showTerm(Falsee) ++ " !<==> (" ++ showTerm(t) ++ ")"
 showTerm(Inequiv t (Falsee)) = "(" ++ showTerm(t) ++ ")" ++ " !<==> " ++ showTerm(Falsee)
 showTerm(Inequiv (Var i)(Var j)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Var j)
-showTerm(Inequiv (Var i) t) = showTerm(Var i) ++ " !<==> (" ++ showTerm(t) ++ ")"
-showTerm(Inequiv t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " !<==> " ++ showTerm(Var i) 
-showTerm (Inequiv t1 t2) = "(" ++ showTerm t1 ++ ") !<==> (" ++ showTerm t2 ++ ")"
+showTerm(Inequiv (Var i) t) = showTerm(Var i) ++ " !<==> " ++ showTerm(t)
+showTerm(Inequiv t (Var i)) = showTerm(t) ++ " !<==> " ++ showTerm(Var i) 
+showTerm (Inequiv t1 t2) = showTerm t1 ++ " !<==> " ++ showTerm t2 
 --Mostrar true y false
 showTerm(Truee) = "true"
 showTerm(Falsee) = "false"

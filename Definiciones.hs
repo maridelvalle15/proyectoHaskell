@@ -44,7 +44,7 @@ showTerm(Equiv (Neg t) (Inequiv t1 t2) ) = showTerm(Neg t) ++ " <==> (" ++ showT
 showTerm(Equiv (Neg t) (Equiv t1 t2) ) = showTerm(Neg t) ++ " <==> (" ++ showTerm(Equiv t1 t2) ++ ")" 
 showTerm(Equiv (Neg t) t1) = showTerm(Neg t) ++ " <==> " ++ showTerm(t1)
 showTerm(Equiv (Inequiv t1 t2) (Neg t)) = "(" ++ showTerm(Inequiv t1 t2) ++ ") <==> " ++ showTerm(Neg t) 
---showTerm(Equiv (Equiv t1 t2) (Neg t)) = "(" ++ showTerm(Equiv t1 t2) ++ ") <==> " ++ showTerm(Neg t) 
+showTerm(Equiv (Equiv t1 t2) (Neg t)) = "(" ++ showTerm(Equiv t1 t2) ++ ") <==> " ++ showTerm(Neg t) 
 showTerm(Equiv t1 (Neg t)) = showTerm(t1) ++ " <==> " ++ showTerm(Neg t) 
 showTerm (Neg (Equiv t1 t2)) = "¬(" ++ showTerm (Equiv t1 t2) ++ ")"
  --Mostrar ¬ !<==> 

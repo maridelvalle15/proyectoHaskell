@@ -111,12 +111,20 @@ showTerm(Imp t (Falsee)) = "(" ++ showTerm(t) ++ ")" ++ " ==> " ++ showTerm(Fals
 showTerm(Imp (Var i)(Var j)) = showTerm(Var i) ++ " ==> " ++ showTerm(Var j)
 
 showTerm(Imp (Var i) (Equiv t1 t2)) = showTerm(Var i) ++ " ==> (" ++ showTerm(Equiv t1 t2) ++ ")"
+showTerm(Imp (Var i) (Imp t1 t2)) = showTerm(Var i) ++ " ==> (" ++ showTerm(Imp t1 t2) ++ ")"
 showTerm(Imp (Equiv t1 t2) (Var i)) = "(" ++ showTerm(Equiv t1 t2) ++ ") ==> " ++ showTerm(Var i)
+showTerm(Imp (Imp t1 t2) (Var i)) = "(" ++ showTerm(Imp t1 t2) ++ ") ==> " ++ showTerm(Var i)
 showTerm(Imp (Equiv t1 t2) (Inequiv t3 t4)) = "(" ++ showTerm(Equiv t1 t2) ++ ") ==> (" ++ showTerm(Inequiv t3 t4) ++ ")"
+showTerm(Imp (Equiv t1 t2) (Imp t3 t4)) = "(" ++ showTerm(Equiv t1 t2) ++ ") ==> (" ++ showTerm(Imp t3 t4) ++ ")"
+showTerm(Imp (Imp t1 t2) (Inequiv t3 t4)) = "(" ++ showTerm(Imp t1 t2) ++ ") ==> (" ++ showTerm(Inequiv t3 t4) ++ ")"
 showTerm(Imp (Inequiv t1 t2) (Equiv t3 t4)) = "(" ++ showTerm(Inequiv t1 t2) ++ ") ==> (" ++ showTerm(Equiv t3 t4) ++ ")"
+showTerm(Imp (Inequiv t1 t2) (Imp t3 t4)) = "(" ++ showTerm(Inequiv t1 t2) ++ ") ==> (" ++ showTerm(Imp t3 t4) ++ ")"
 showTerm(Imp (Equiv t1 t2) (Equiv t3 t4)) = "(" ++ showTerm(Equiv t1 t2) ++ ") ==> (" ++ showTerm(Equiv t3 t4) ++ ")"
+showTerm(Imp (Imp t1 t2) (Imp t3 t4)) = "(" ++ showTerm(Imp t1 t2) ++ ") ==> (" ++ showTerm(Imp t3 t4) ++ ")"
 showTerm(Imp t (Equiv t1 t2)) = showTerm(t) ++ " ==> (" ++ showTerm(Equiv t1 t2) ++ ")"
+showTerm(Imp t (Imp t1 t2)) = showTerm(t) ++ " ==> (" ++ showTerm(Imp t1 t2) ++ ")"
 showTerm(Imp (Equiv t1 t2) t) = "(" ++ showTerm(Equiv t1 t2) ++ ") ==> " ++ showTerm(t)
+showTerm(Imp (Imp t1 t2) t) = "(" ++ showTerm(Imp t1 t2) ++ ") ==> " ++ showTerm(t)
 showTerm(Imp (Var i) (Inequiv t1 t2)) = showTerm(Var i) ++ " ==> (" ++ showTerm(Inequiv t1 t2) ++ ")"
 showTerm(Imp (Inequiv t1 t2) (Var i)) = "(" ++ showTerm(Inequiv t1 t2) ++ ") ==> " ++ showTerm(Var i)
 showTerm(Imp (Inequiv t1 t2) (Inequiv t3 t4)) = "(" ++ showTerm(Inequiv t1 t2) ++ ") ==> (" ++ showTerm(Inequiv t3 t4) ++ ")"

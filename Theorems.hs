@@ -1,6 +1,6 @@
 module Theorems where
 
-import Term (Term, (===), (<==>), (!<==>), (\/), (/\), neg, true, false, p, q, r, Equation)
+import Term (Term, (===), (<==>), (!<==>), (\/), (/\), (==>), neg, true, false, p, q, r, Equation)
 
 prop :: Float -> Equation
 prop num
@@ -64,21 +64,17 @@ prop num
   | num == 3.73 = true ==> p === p
   | num == 3.74 = p  ==> false === neg p
   | num == 3.75 = false ==> p === true
-  | num == 3.761 = p  ==> p \/ q
-  | num == 3.762 = p /\ q ==> p
-  | num == 3.763 = p /\ q ==> p \/ q
-  | num == 3.764 = p \/ (q /\ r) ==> p \/ q
-  | num == 3.765 = p /\ q ==> p /\ (q \/ r)
-  | num == 3.77 = p /\ (p ==> q) ==> q
+  | num == 3.761 = p  ==> p \/ q === true
+  | num == 3.762 = p /\ q ==> p === true
+  | num == 3.763 = p /\ q ==> p \/ q === true
+  | num == 3.764 = p \/ (q /\ r) ==> p \/ q === true
+  | num == 3.765 = p /\ q ==> p /\ (q \/ r) === true
+  | num == 3.77 = p /\ (p ==> q) ==> q === true
   | num == 3.78 = (p ==> r) /\ (q ==> r) === (p \/ q ==> r)
   | num == 3.79 = (p ==> r) /\  (neg p ==> r) === r
   | num == 3.80 = (p ==> q) /\ (q ==> p) === (p <==> q)
-  | num == 3.81 = (p ==> q) /\ (q ==> p) ==> (p === q)
+  | num == 3.81 = (p ==> q) /\ (q ==> p) ==> (p <==> q) === true
   | num == 3.821 = (p ==> q) /\ (q ==> r) === (p ==> r)
-  | num == 3.822 = (p <==> q) /\ (q ==> r) ==> (p ==> r)
-  | num == 3.823 = (p ==> q) /\ (q <==> r) ==> (p ==> r)
-
-  
-
-
+  | num == 3.822 = (p <==> q) /\ (q ==> r) ==> (p ==> r) === true
+  | num == 3.823 = (p ==> q) /\ (q <==> r) ==> (p ==> r) === true
   | otherwise = error "The statement doesn't exists"

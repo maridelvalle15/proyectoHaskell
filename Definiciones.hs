@@ -128,15 +128,22 @@ showTerm(Equiv (Truee)(Falsee)) = showTerm(Truee) ++ " <==> " ++ showTerm(Falsee
 showTerm(Equiv (Truee)(Truee)) = showTerm(Truee) ++ " <==> " ++ showTerm(Truee)
 showTerm(Equiv (Truee)(Var i)) = showTerm(Truee) ++ " <==> " ++ showTerm(Var i)
 showTerm(Equiv (Var i)(Truee)) = showTerm(Var i) ++ " <==> " ++ showTerm(Truee)
-showTerm(Equiv (Truee) t) = showTerm(Truee) ++ " <==> (" ++ showTerm(t) ++ ")"
-showTerm(Equiv t (Truee)) = "(" ++ showTerm(t) ++ ")" ++ " <==> " ++ showTerm(Truee)
+showTerm(Equiv (Truee) (Equiv t1 t2)) = showTerm(Truee) ++ " <==> (" ++ showTerm(Equiv t1 t2) ++ ")"
+showTerm(Equiv (Truee) (Inequiv t1 t2)) = showTerm(Truee) ++ " <==> (" ++ showTerm(Inequiv t1 t2) ++ ")"
+showTerm(Equiv (Truee) t) = showTerm(Truee) ++ " <==> " ++ showTerm(t)
+showTerm(Equiv (Equiv t1 t2) (Truee)) = "(" ++ showTerm(Equiv t1 t2) ++ ")" ++ " <==> " ++ showTerm(Truee)
+showTerm(Equiv (Inequiv t1 t2) (Truee)) = "(" ++ showTerm(Inequiv t1 t2) ++ ")" ++ " <==> " ++ showTerm(Truee)
+showTerm(Equiv t (Truee)) = showTerm(t) ++ " <==> " ++ showTerm(Truee)
 showTerm(Equiv (Falsee)(Var i)) = showTerm(Falsee) ++ " <==> " ++ showTerm(Var i)
 showTerm(Equiv (Var i)(Falsee)) = showTerm(Var i) ++ " <==> " ++ showTerm(Falsee)
-showTerm(Equiv (Falsee) t) = showTerm(Falsee) ++ " <==> (" ++ showTerm(t) ++ ")"
+showTerm(Equiv (Falsee) (Equiv t1 t2)) = showTerm(Falsee) ++ " <==> (" ++ showTerm(Equiv t1 t2) ++ ")"
+showTerm(Equiv (Falsee) (Inequiv t1 t2)) = showTerm(Falsee) ++ " <==> (" ++ showTerm(Inequiv t1 t2) ++ ")"
+showTerm(Equiv (Falsee) t) = showTerm(Falsee) ++ " <==> " ++ showTerm(t)
 showTerm(Equiv t (Falsee)) = "(" ++ showTerm(t) ++ ")" ++ " <==> " ++ showTerm(Falsee)
 showTerm(Equiv (Var i)(Var j)) = showTerm(Var i) ++ " <==> " ++ showTerm(Var j)
+showTerm(Equiv (Var i) (Equiv t1 t2)) = showTerm(Var i) ++ " <==> (" ++ showTerm(Equiv t1 t2) ++ ")"
+showTerm(Equiv (Var i) (Inequiv t1 t2)) = showTerm(Var i) ++ " <==> (" ++ showTerm(Inequiv t1 t2) ++ ")"
 showTerm(Equiv (Var i) t) = showTerm(Var i) ++ " <==> " ++ showTerm(t)
-showTerm(Equiv t (Var i)) = showTerm(t) ++ " <==> " ++ showTerm(Var i) 
 showTerm (Equiv t1 t2) = showTerm t1 ++ " <==> " ++ showTerm t2
  --Mostrar !<==>
 showTerm(Inequiv (Falsee)(Falsee)) = showTerm(Falsee) ++ " !<==> " ++ showTerm(Falsee)

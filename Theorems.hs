@@ -46,4 +46,39 @@ prop num
   | num == 3.40 = p /\ false === false                        -- theorem
   | num == 3.41 = p /\ (q /\ r) === (p /\ q) /\ (p /\ r)      -- theorem
   | num == 3.42 = p /\ neg p === false                        -- theorem
+  | num == 3.57 = p ==> q  === p \/ q <==> q                        -- theorem
+  | num == 3.59 = p ==> q  === neg p \/ q                       -- theorem
+  | num == 3.60 = p ==> q  === p /\ q <==> p                        -- theorem
+  | num == 3.61 = p ==> q  === neg q ==> neg p                        -- theorem
+  | num == 3.62 = p ==> (q  <==> r) === p /\ q <==> p /\ r                       -- theorem
+  | num == 3.63 = p ==> (q  <==> r) === p ==> q <==> p ==> r                        -- theorem
+  | num == 3.64 = p ==> (q  ==> r) === (p ==> q) ==> (p ==> r)
+  | num == 3.65 = p /\ q  ==> r === p ==> (q ==> r)
+  | num == 3.66 = p /\ (p  ==> q) === p /\ q 
+  | num == 3.67 = p /\ (q  ==> p) === p 
+  | num == 3.68 = p \/ (p  ==> q) === true
+  | num == 3.69 = p \/ (q  ==> p) === q ==> p
+  | num == 3.70 = p \/ q  ==> p /\ q === p <==> q
+  | num == 3.71 = p  ==> p === true
+  | num == 3.72 = p  ==> true === true
+  | num == 3.73 = true ==> p === p
+  | num == 3.74 = p  ==> false === neg p
+  | num == 3.75 = false ==> p === true
+  | num == 3.761 = p  ==> p \/ q
+  | num == 3.762 = p /\ q ==> p
+  | num == 3.763 = p /\ q ==> p \/ q
+  | num == 3.764 = p \/ (q /\ r) ==> p \/ q
+  | num == 3.765 = p /\ q ==> p /\ (q \/ r)
+  | num == 3.77 = p /\ (p ==> q) ==> q
+  | num == 3.78 = (p ==> r) /\ (q ==> r) === (p \/ q ==> r)
+  | num == 3.79 = (p ==> r) /\  (neg p ==> r) === r
+  | num == 3.80 = (p ==> q) /\ (q ==> p) === (p <==> q)
+  | num == 3.81 = (p ==> q) /\ (q ==> p) ==> (p === q)
+  | num == 3.821 = (p ==> q) /\ (q ==> r) === (p ==> r)
+  | num == 3.822 = (p <==> q) /\ (q ==> r) ==> (p ==> r)
+  | num == 3.823 = (p ==> q) /\ (q <==> r) ==> (p ==> r)
+
+  
+
+
   | otherwise = error "The statement doesn't exists"

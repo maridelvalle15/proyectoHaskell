@@ -127,7 +127,7 @@ x ==> y = Imp x y
 infixl 5 <==>
 (<==>) :: Term -> Term -> Term
 x <==> y =  Equiv x y
-infixl 4 !<==>
+infixl 5 !<==>
 (!<==>) :: Term -> Term -> Term
 x !<==> y =  Inequiv x y
 infix 3 ===
